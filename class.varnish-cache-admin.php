@@ -17,49 +17,52 @@ class ClpVarnishCacheAdmin {
     public function add_adminbar($adminbar) {
         $is_admin = is_admin();
         if (true === $is_admin && true === current_user_can( 'edit_published_posts' )) {
-            $varnish_cache_enabled = $this->clp_varnish_cache_manager->is_enabled();
-            $menu_title = sprintf( __( 'CLP Varnish Cache (%s)', 'clp-varnish-cache' ), (true === $varnish_cache_enabled ? 'Enabled' : 'Disabled'));
-            $admin_bar_nodes = [
-                [
-                    'id'    => 'clp-varnish-cache',
-                    'title' => '<span class="ab-icon" style="background-image: url(' . self::get_svg_icon() . ') !important;"></span><span class="ab-label">' . $menu_title . '</span>',
-                    'meta'  => [
-                        'class' => 'clp-varnish-cache',
+            $varnish_cache_settings = $this->clp_varnish_cache_manager->get_cache_settings();
+            if (false === empty($varnish_cache_settings)) {
+                $varnish_cache_enabled = $this->clp_varnish_cache_manager->is_enabled();
+                $menu_title = sprintf( __( 'CLP Varnish Cache (%s)', 'clp-varnish-cache' ), (true === $varnish_cache_enabled ? 'Enabled' : 'Disabled'));
+                $admin_bar_nodes = [
+                    [
+                        'id'    => 'clp-varnish-cache',
+                        'title' => '<span class="ab-icon" style="background-image: url(' . self::get_svg_icon() . ') !important;"></span><span class="ab-label">' . $menu_title . '</span>',
+                        'meta'  => [
+                            'class' => 'clp-varnish-cache',
+                        ],
                     ],
-                ],
-                [
-                    'parent' => 'clp-varnish-cache',
-                    'id'     => 'clp-varnish-cache-purge',
-                    'title'  => __( 'Purge', 'clp-varnish-cache' ),
-                    'meta'   => [ 'tabindex' => '0' ],
-                ],
-                [
-                    'parent' => 'clp-varnish-cache-purge',
-                    'id'     => 'clp-varnish-cache-purge-all',
-                    'title'  => __( 'All Pages', 'clp-varnish-cache' ),
-                    'href'   => wp_nonce_url(add_query_arg( 'vhp_flush_do', 'all' ), 'vhp-flush-do'),
-                    'meta'   => [
-                        'title' => __( 'All Pages', 'clp-varnish-cache' ),
+                    [
+                        'parent' => 'clp-varnish-cache',
+                        'id'     => 'clp-varnish-cache-purge',
+                        'title'  => __( 'Purge', 'clp-varnish-cache' ),
+                        'meta'   => [ 'tabindex' => '0' ],
                     ],
-                ],
-                [
-                    'parent' => 'clp-varnish-cache-purge',
-                    'id'     => 'clp-varnish-cache-purge-tags-urls',
-                    'title'  => __( 'Cache Tags and Urls', 'clp-varnish-cache' ),
-                    'href'   => wp_nonce_url(add_query_arg( 'vhp_flush_do', 'all' ), 'vhp-flush-do'),
-                    'meta'   => [
-                        'title' => __( 'Cache Tags and Urls', 'clp-varnish-cache' ),
+                    [
+                        'parent' => 'clp-varnish-cache-purge',
+                        'id'     => 'clp-varnish-cache-purge-all',
+                        'title'  => __( 'All Pages', 'clp-varnish-cache' ),
+                        'href'   => wp_nonce_url(add_query_arg( 'vhp_flush_do', 'all' ), 'vhp-flush-do'),
+                        'meta'   => [
+                            'title' => __( 'All Pages', 'clp-varnish-cache' ),
+                        ],
                     ],
-                ],
-                [
-                    'parent' => 'clp-varnish-cache',
-                    'id'     => 'clp-varnish-cache-settings',
-                    'title'  => __( 'Settings', 'clp-varnish-cache' ),
-                    'meta'   => [ 'tabindex' => '0' ],
-                ],
-            ];
-            foreach ($admin_bar_nodes as $node) {
-                $adminbar->add_node($node);
+                    [
+                        'parent' => 'clp-varnish-cache-purge',
+                        'id'     => 'clp-varnish-cache-purge-tags-urls',
+                        'title'  => __( 'Cache Tags and Urls', 'clp-varnish-cache' ),
+                        'href'   => wp_nonce_url(add_query_arg( 'vhp_flush_do', 'all' ), 'vhp-flush-do'),
+                        'meta'   => [
+                            'title' => __( 'Cache Tags and Urls', 'clp-varnish-cache' ),
+                        ],
+                    ],
+                    [
+                        'parent' => 'clp-varnish-cache',
+                        'id'     => 'clp-varnish-cache-settings',
+                        'title'  => __( 'Settings', 'clp-varnish-cache' ),
+                        'meta'   => [ 'tabindex' => '0' ],
+                    ],
+                ];
+                foreach ($admin_bar_nodes as $node) {
+                    $adminbar->add_node($node);
+                }
             }
         }
     }
@@ -73,14 +76,13 @@ class ClpVarnishCacheAdmin {
 
     public static function get_svg_icon($base64 = true, $icon_color = false) {
         global $_wp_admin_css_colors;
-
         $fill = ( false !== $icon_color ) ? sanitize_hex_color( $icon_color ) : '#82878c';
         if (true === is_admin() && false === $icon_color && get_user_option('admin_color') ) {
-            $admin_colors  = json_decode( wp_json_encode($_wp_admin_css_colors), true);
+            $admin_colors  = json_decode(wp_json_encode($_wp_admin_css_colors), true);
             $current_color = get_user_option( 'admin_color' );
-            $fill          = $admin_colors[ $current_color ]['icon_colors']['base'];
+            $fill          = $admin_colors[$current_color ]['icon_colors']['base'];
         }
-        $svg = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="100%" height="100%" style="fill:' . $fill . '" viewBox="0 0 36.2 34.39" role="img" aria-hidden="true" focusable="false"><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><path fill="' . $fill . '" d="M24.41,0H4L0,18.39H12.16v2a2,2,0,0,0,4.08,0v-2H24.1a8.8,8.8,0,0,1,4.09-1Z"/><path fill="' . $fill . '" d="M21.5,20.4H18.24a4,4,0,0,1-8.08,0v0H.2v8.68H19.61a9.15,9.15,0,0,1-.41-2.68A9,9,0,0,1,21.5,20.4Z"/><path fill="' . $fill . '" d="M28.7,33.85a7,7,0,1,1,7-7A7,7,0,0,1,28.7,33.85Zm-1.61-5.36h5V25.28H30.31v-3H27.09Z"/><path fill="' . $fill . '" d="M28.7,20.46a6.43,6.43,0,1,1-6.43,6.43,6.43,6.43,0,0,1,6.43-6.43M26.56,29h6.09V24.74H30.84V21.8H26.56V29m2.14-9.64a7.5,7.5,0,1,0,7.5,7.5,7.51,7.51,0,0,0-7.5-7.5ZM27.63,28V22.87h2.14v2.95h1.81V28Z"/></g></g></svg>';
+        $svg = '<svg width="100%" viewBox="0 5 20 20" xmlns="http://www.w3.org/2000/svg"><path fill="' . $fill . '" d="m15.676002,13.634a4.959,4.959 0 0 0 -2.363,-1.649l0,-0.06c0,-2.823 -2.208,-5.124 -4.93,-5.124c-2.724,0 -4.933,2.296 -4.933,5.125l0,0.07c-1.994,0.653 -3.45,2.595 -3.45,4.886c0,2.823 2.21,5.125 4.932,5.125a4.832,4.832 0 0 0 3.465,-1.475a4.817,4.817 0 0 0 3.461,1.475c2.717,0 4.933,-2.296 4.933,-5.125c0,-1.18 -0.4,-2.334 -1.115,-3.248zm-3.818,7.077c-2.031,0 -3.685,-1.718 -3.685,-3.83a0.637,0.637 0 0 0 -0.623,-0.646a0.634,0.634 0 0 0 -0.624,0.647c0,0.957 0.257,1.855 0.696,2.622a3.607,3.607 0 0 1 -2.69,1.213c-2.032,0 -3.687,-1.719 -3.687,-3.83c0,-2.11 1.655,-3.829 3.687,-3.829c0.44,0 0.868,0.082 1.278,0.234c0.005,0 0.009,0.005 0.014,0.005c0.142,0.05 0.342,0.147 0.404,0.201a0.6,0.6 0 0 0 0.874,-0.07a0.659,0.659 0 0 0 -0.068,-0.91c-0.272,-0.239 -0.696,-0.402 -0.8,-0.44a4.767,4.767 0 0 0 -1.697,-0.31c-0.079,0 -0.157,0 -0.236,0.005c0.084,-2.04 1.702,-3.671 3.687,-3.671c2.031,0 3.685,1.718 3.685,3.83a3.896,3.896 0 0 1 -1.55,3.122a0.663,0.663 0 0 0 -0.147,0.898c0.12,0.174 0.315,0.272 0.509,0.272c0.125,0 0.25,-0.038 0.361,-0.12a5.164,5.164 0 0 0 1.895,-2.812c1.424,0.549 2.413,1.979 2.413,3.595c-0.005,2.106 -1.659,3.824 -3.696,3.824z"/></svg>';
         if (true === $base64) {
             return 'data:image/svg+xml;base64,' . base64_encode($svg);
         }
