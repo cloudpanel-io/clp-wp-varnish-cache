@@ -11,6 +11,7 @@ class ClpVarnishCacheAdmin {
 
     public function init() {
         add_action('admin_bar_menu', array($this, 'add_adminbar'), 100);
+        add_action('admin_menu', array($this, 'add_admin_menu'), 100);
         add_action('admin_enqueue_scripts', array($this, 'add_css'));
     }
 
@@ -65,6 +66,24 @@ class ClpVarnishCacheAdmin {
                 }
             }
         }
+    }
+
+    public function add_admin_menu() {
+        //$is_multi_site = is_multisite();
+        add_submenu_page(
+            'options-general.php',
+            __( 'CLP Varnish Cache', 'clp-varnish-cache' ),
+            __( 'CLP Varnish Cache', 'clp-varnish-cache' ),
+            'manage_options',
+            'clp-varnish-cache',
+            array( &$this, 'clp_varnish_cache_page' )
+        );
+    }
+
+    public function clp_varnish_cache_page() {
+        $plugin_dir_path = plugin_dir_path( __FILE__ );
+        $varnish_cache_page_path = sprintf('%s/pages/clp-varnish-cache.php', rtrim($plugin_dir_path, '/'));
+        include $varnish_cache_page_path;
     }
 
     public function add_css() {
