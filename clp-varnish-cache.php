@@ -22,5 +22,5 @@ if (true === $is_admin) {
     define( 'CLP_VARNISH_PLUGIN_DIR', plugin_dir_path( __FILE__));
     require_once CLP_VARNISH_PLUGIN_DIR . 'class.varnish-cache-manager.php';
     require_once CLP_VARNISH_PLUGIN_DIR . 'class.varnish-cache-admin.php';
-    $clpVarnishCacheAdmin = new ClpVarnishCacheAdmin();
+    $clp_varnish_cache_admin = new ClpVarnishCacheAdmin();
 }

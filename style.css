@@ -6,3 +6,57 @@
   background-position: 0 6px;
   background-size: 20px;
 }
+
+.clp-varnish-cache-container {
+  max-width: 800px;
+}
+
+.clp-varnish-cache-container .notice {
+  margin: 0 !important;
+}
+
+.clp-varnish-cache-block {
+  background-color: #fdfdfd;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 1px 1px #0000000a;
+  margin: 20px 0px;
+}
+
+.clp-varnish-cache-block-header {
+  border-bottom: 1px solid #ccc;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.clp-varnish-cache-block-header h3 {
+  margin: 5px 0px;
+  padding: 0;
+  font-size: 1.4em;
+}
+
+.clp-varnish-cache-block-content {
+  padding: 25px 20px;
+  font-size: 14px;
+}
+
+.clp-varnish-cache-block-content .form-table {
+  margin-top: 0;
+}
+
+.clp-varnish-cache-block-content .form-table td {
+  padding: 10px 0px;
+}
+
+.clp-varnish-cache-block-content input[type=text] {
+  width: 100%;
+}
+
+.clp-varnish-cache-block-content table {
+  margin-bottom: 10px;
+}
+
+.clp-varnish-cache-block-content table td.field-name {
+  width: 30%;
+  font-weight: bold;
+}

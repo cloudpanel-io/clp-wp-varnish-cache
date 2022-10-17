@@ -15,6 +15,10 @@ class ClpVarnishCacheAdmin {
         add_action('admin_enqueue_scripts', array($this, 'add_css'));
     }
 
+    public function get_clp_cache_manager() {
+        return $this->clp_varnish_cache_manager;
+    }
+
     public function add_adminbar($adminbar) {
         $is_admin = is_admin();
         if (true === $is_admin && true === current_user_can( 'edit_published_posts' )) {
@@ -22,6 +26,7 @@ class ClpVarnishCacheAdmin {
             if (false === empty($varnish_cache_settings)) {
                 $varnish_cache_enabled = $this->clp_varnish_cache_manager->is_enabled();
                 $menu_title = sprintf( __( 'CLP Varnish Cache (%s)', 'clp-varnish-cache' ), (true === $varnish_cache_enabled ? 'Enabled' : 'Disabled'));
+                $is_network = is_multisite() && is_network_admin();
                 $admin_bar_nodes = [
                     [
                         'id'    => 'clp-varnish-cache',
@@ -38,26 +43,27 @@ class ClpVarnishCacheAdmin {
                     ],
                     [
                         'parent' => 'clp-varnish-cache-purge',
-                        'id'     => 'clp-varnish-cache-purge-all',
-                        'title'  => __( 'All Pages', 'clp-varnish-cache' ),
-                        'href'   => wp_nonce_url(add_query_arg( 'vhp_flush_do', 'all' ), 'vhp-flush-do'),
+                        'id'     => 'clp-varnish-cache-purge-entire-cache',
+                        'title'  => __( 'Entire Cache', 'clp-varnish-cache' ),
+                        'href'   => (true === $is_network ? network_admin_url('settings.php?page=clp-varnish-cache&action=purge-entire-cache') : admin_url('options-general.php?page=clp-varnish-cache&action=purge-entire-cache')),
                         'meta'   => [
-                            'title' => __( 'All Pages', 'clp-varnish-cache' ),
+                            'title' => __( 'Entire Cache', 'clp-varnish-cache' ),
                         ],
                     ],
                     [
                         'parent' => 'clp-varnish-cache-purge',
                         'id'     => 'clp-varnish-cache-purge-tags-urls',
                         'title'  => __( 'Cache Tags and Urls', 'clp-varnish-cache' ),
-                        'href'   => wp_nonce_url(add_query_arg( 'vhp_flush_do', 'all' ), 'vhp-flush-do'),
+                        'href'   => (true === $is_network ? network_admin_url('settings.php?page=clp-varnish-cache') : admin_url('options-general.php?page=clp-varnish-cache')),
                         'meta'   => [
                             'title' => __( 'Cache Tags and Urls', 'clp-varnish-cache' ),
                         ],
                     ],
                     [
                         'parent' => 'clp-varnish-cache',
-                        'id'     => 'clp-varnish-cache-settings',
+                        'id'     => 'clp-varnish-cache-enable',
                         'title'  => __( 'Settings', 'clp-varnish-cache' ),
+                        'href'   => (true === $is_network ? network_admin_url('settings.php?page=clp-varnish-cache') : admin_url('options-general.php?page=clp-varnish-cache')),
                         'meta'   => [ 'tabindex' => '0' ],
                     ],
                 ];
@@ -69,7 +75,6 @@ class ClpVarnishCacheAdmin {
     }
 
     public function add_admin_menu() {
-        //$is_multi_site = is_multisite();
         add_submenu_page(
             'options-general.php',
             __( 'CLP Varnish Cache', 'clp-varnish-cache' ),
@@ -84,6 +89,16 @@ class ClpVarnishCacheAdmin {
         $plugin_dir_path = plugin_dir_path( __FILE__ );
         $varnish_cache_page_path = sprintf('%s/pages/clp-varnish-cache.php', rtrim($plugin_dir_path, '/'));
         include $varnish_cache_page_path;
+    }
+
+    public function get_success_notice($text) {
+        $notice = '<div id="notice" class="notice notice-success fade is-dismissible"><p><strong>' . esc_html__($text, 'clp-varnish-cache') . '</strong></p></div>';
+        return $notice;
+    }
+
+    public function get_error_notice($text) {
+        $notice = '<div id="notice" class="notice notice-error fade is-dismissible"><p><strong>' . esc_html__($text, 'clp-varnish-cache') . '</strong></p></div>';
+        return $notice;
     }
 
     public function add_css() {
