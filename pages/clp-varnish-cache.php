@@ -1,15 +1,49 @@
 <?php
 
 global $clp_varnish_cache_admin;
-
-$clp_cache_manager = $clp_varnish_cache_admin->get_clp_cache_manager();
-$clp_cache_settings = $clp_cache_manager->get_cache_settings();
-
 $is_network = is_multisite() && is_network_admin();
 $notice = null;
+
+function getPostValue($key) {
+    $postValue = (true === isset($_POST[$key]) && false === empty(trim($_POST[$key])) ? $_POST[$key] : '');
+    return $postValue;
+}
+
+$clp_cache_manager = $clp_varnish_cache_admin->get_clp_cache_manager();
+
+if (true === isset($_POST['action']) && 'save-settings' == $_POST['action']) {
+    $enabled = (1 == getPostValue('enabled')  ? true : false);
+    $server = getPostValue('server');
+    $cache_lifetime = getPostValue('cache-lifetime');
+    $cache_tag_prefix = getPostValue('cache-tag-prefix');
+    $excluded_params = array_map('trim', array_filter(explode(',', getPostValue('excluded-params'))));
+    $excludes = array_map('trim', array_filter(explode(PHP_EOL, getPostValue('excludes'))));
+    if (false === empty($server) && false === empty($cache_lifetime) && false === empty($cache_tag_prefix)) {
+        $cache_settings = [
+            'enabled'        => $enabled,
+            'server'         => $server,
+            'cacheTagPrefix' => $cache_tag_prefix,
+            'cacheLifetime'  => $cache_lifetime,
+            'excludes'       => $excludes,
+            'excludedParams' => $excluded_params,
+        ];
+        $clp_cache_manager->write_cache_settings($cache_settings);
+        $clp_cache_manager->reset_cache_settings();
+        $notice = $clp_varnish_cache_admin->get_success_notice('Settings have been saved.');
+    }
+}
+
 if (true === isset($_GET['action']) && 'purge-entire-cache' == $_GET['action']) {
     $notice = $clp_varnish_cache_admin->get_success_notice('Varnish Cache has been purged.');
 }
+
+$clp_cache_settings = $clp_cache_manager->get_cache_settings();
+$is_enabled = $clp_cache_manager->is_enabled();
+$server = $clp_cache_manager->get_server();
+$cache_lifetime = $clp_cache_manager->get_cache_lifetime();
+$cache_tag_prefix = $clp_cache_manager->get_cache_tag_prefix();
+$excluded_params = $clp_cache_manager->get_excluded_params();
+$excludes = $clp_cache_manager->get_excludes();
 
 ?>
 <h1 id="clp-varnish-cache"><?php esc_html_e( 'CLP Varnish Cache', 'clp-varnish-cache' ); ?></h1>
@@ -33,7 +67,7 @@ if (true === isset($_GET['action']) && 'purge-entire-cache' == $_GET['action']) 
                     <?php esc_html_e( 'Enable Varnish Cache', 'clp-varnish-cache' ); ?>:
                   </td>
                   <td>
-                    sdfsdf
+                    <input type="checkbox" name="enabled" <?php echo (true === $is_enabled ? 'checked' : ''); ?> value="1" />
                   </td>
                 </tr>
                 <tr>
@@ -41,12 +75,47 @@ if (true === isset($_GET['action']) && 'purge-entire-cache' == $_GET['action']) 
                     <?php esc_html_e( 'Varnish Server', 'clp-varnish-cache' ); ?>:
                   </td>
                   <td>
-                    <input type="text" name="server" required="required">
+                    <input type="text" name="server" required="required" value="<?php echo $server; ?>" />
+                  </td>
+                </tr>
+                <tr>
+                  <td class="field-name">
+                    <?php esc_html_e( 'Cache Lifetime', 'clp-varnish-cache' ); ?>:
+                  </td>
+                  <td>
+                    <input type="text" name="cache-lifetime" required="required" value="<?php echo $cache_lifetime; ?>" />
+                    <p class="description"><?php esc_html_e( 'Cache Lifetime in seconds before being refreshed.', 'clp-varnish-cache' ); ?></p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="field-name">
+                    <?php esc_html_e( 'Cache Tag Prefix', 'clp-varnish-cache' ); ?>:
+                  </td>
+                  <td>
+                    <input type="text" name="cache-tag-prefix" required="required" value="<?php echo $cache_tag_prefix; ?>" />
+                  </td>
+                </tr>
+                <tr>
+                  <td class="field-name">
+                    <?php esc_html_e( 'Excluded Params', 'clp-varnish-cache' ); ?>:
+                  </td>
+                  <td>
+                    <input type="text" name="excluded-params" value="<?php echo $excluded_params; ?>" />
+                    <p class="description"><?php esc_html_e( 'List of GET parameters, separated by a comma, to disable caching.', 'clp-varnish-cache' ); ?></p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="field-name">
+                    <?php esc_html_e( 'Excludes', 'clp-varnish-cache' ); ?>:
+                  </td>
+                  <td>
+                    <textarea name="excludes" rows="6"><?php echo $excludes; ?></textarea>
+                    <p class="description"><?php esc_html_e( 'Urls and files that Varnish Cache shouldn\'t cache.', 'clp-varnish-cache' ); ?></p>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <input type="hidden" name="action" value="settings" />
+            <input type="hidden" name="action" value="save-settings" />
             <input type="submit" class="button action" value="<?php esc_html_e( 'Save', 'clp-varnish-cache' ); ?>" />
           </div>
         </div>
@@ -62,7 +131,7 @@ if (true === isset($_GET['action']) && 'purge-entire-cache' == $_GET['action']) 
               <tbody>
                 <tr>
                   <td>
-                    <input type="text" name="purge-value" required="required" class="purge-value" placeholder="https://wp.moby.io/example-site">
+                    <input type="text" name="purge-value" required="required" class="purge-value" placeholder="https://www.domain.com/site.html">
                     <p class="description"><?php esc_html_e( 'You can purge single urls or tags separated by comma.', 'clp-varnish-cache' ); ?></p>
                   </td>
                 </tr>

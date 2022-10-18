@@ -48,12 +48,17 @@
   padding: 10px 0px;
 }
 
-.clp-varnish-cache-block-content input[type=text] {
+.clp-varnish-cache-block-content input[type=text],
+.clp-varnish-cache-block-content textarea {
   width: 100%;
 }
 
 .clp-varnish-cache-block-content table {
   margin-bottom: 10px;
+}
+
+.clp-varnish-cache-block-content table td {
+  vertical-align: top;
 }
 
 .clp-varnish-cache-block-content table td.field-name {
