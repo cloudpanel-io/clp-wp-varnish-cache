@@ -64,4 +64,79 @@ class ClpVarnishCacheManager {
     public function reset_cache_settings() {
         $this->cache_settings = [];
     }
+
+    public function purge_host($host): void
+    {
+        $headers = [
+            'Host' => $host,
+        ];
+        $this->purge($headers);
+    }
+
+    public function purge_tag($tag): void
+    {
+        $this->purge_tags([$tag]);
+    }
+
+    public function purge_tags(array $tags): void
+    {
+        $headers = [
+            'X-Cache-Tags' => implode(',', $tags),
+        ];
+        $this->purge($headers);
+    }
+
+    public function purge_url( $url): void
+    {
+        $parsed_url = parse_url($url);
+        if (true === isset($parsed_url['host'])) {
+            $server = $this->get_server();
+            $host = $parsed_url['host'];
+            $request_url = $server;
+            if (true === isset($parsed_url['path'])) {
+                $path = $parsed_url['path'];
+                $request_url = sprintf('%s/%s', $request_url, ('/' == $path ? '' : ltrim($path, '/')));
+            }
+            $query_string = parse_url($url, PHP_URL_QUERY);
+            if (false === empty($query_string)) {
+                parse_str($query_string, $query_params);
+                if (false === empty($query_params)) {
+                    $query_string = http_build_query($query_params);
+                    $request_url = sprintf('%s?%s', $request_url, $query_string);
+                }
+            }
+            $headers = [
+                'Host' => $host,
+            ];
+            $this->purge($headers, $request_url);
+        } else {
+            throw new \Exception(sprintf('Not a valid url: %s', $url));
+        }
+    }
+
+    private function purge(array $headers, $request_url = null): void
+    {
+        try {
+            if (true === is_null($request_url)) {
+                $request_url = $this->get_server();
+            }
+            $curl_option_list = [
+                CURLOPT_URL               => $request_url,
+                CURLOPT_HTTPHEADER        => $headers,
+                CURLOPT_CUSTOMREQUEST     => 'PURGE',
+                CURLOPT_VERBOSE           => true,
+                CURLOPT_RETURNTRANSFER    => true,
+                CURLOPT_NOBODY            => true,
+                CURLOPT_CONNECTTIMEOUT_MS => 2000,
+            ];
+            $curl_handler = curl_init();
+            curl_setopt_array($curl_handler, $curl_option_list);
+            curl_exec($curl_handler);
+            curl_close($curl_handler);
+        } catch (\Exception $e) {
+            $error_message = $e->getMessage();
+            echo sprintf('Varnish Cache Purge Failed, Error Message: %s', $error_message);
+            exit();
+        }
+    }
 }

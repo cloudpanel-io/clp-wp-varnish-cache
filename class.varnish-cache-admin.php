@@ -24,8 +24,7 @@ class ClpVarnishCacheAdmin {
         if (true === $is_admin && true === current_user_can( 'edit_published_posts' )) {
             $varnish_cache_settings = $this->clp_varnish_cache_manager->get_cache_settings();
             if (false === empty($varnish_cache_settings)) {
-                $varnish_cache_enabled = $this->clp_varnish_cache_manager->is_enabled();
-                $menu_title = sprintf( __( 'CLP Varnish Cache (%s)', 'clp-varnish-cache' ), (true === $varnish_cache_enabled ? 'Enabled' : 'Disabled'));
+                $menu_title = __( 'CLP Varnish Cache', 'clp-varnish-cache');
                 $is_network = is_multisite() && is_network_admin();
                 $admin_bar_nodes = [
                     [

@@ -3,6 +3,7 @@
 global $clp_varnish_cache_admin;
 $is_network = is_multisite() && is_network_admin();
 $notice = null;
+$host = (true === isset($_SERVER['HTTP_HOST']) && false === empty(trim($_SERVER['HTTP_HOST'])) ? trim($_SERVER['HTTP_HOST']) : '');
 
 function getPostValue($key) {
     $postValue = (true === isset($_POST[$key]) && false === empty(trim($_POST[$key])) ? $_POST[$key] : '');
@@ -12,6 +13,7 @@ function getPostValue($key) {
 $clp_cache_manager = $clp_varnish_cache_admin->get_clp_cache_manager();
 
 if (true === isset($_POST['action']) && 'save-settings' == $_POST['action']) {
+    $old_cache_tag_prefix = $clp_cache_manager->get_cache_tag_prefix();
     $enabled = (1 == getPostValue('enabled')  ? true : false);
     $server = getPostValue('server');
     $cache_lifetime = getPostValue('cache-lifetime');
@@ -29,11 +31,43 @@ if (true === isset($_POST['action']) && 'save-settings' == $_POST['action']) {
         ];
         $clp_cache_manager->write_cache_settings($cache_settings);
         $clp_cache_manager->reset_cache_settings();
+        if (false === $enabled) {
+            if (false === empty($old_cache_tag_prefix)) {
+                $clp_cache_manager->purge_tag($old_cache_tag_prefix);
+            }
+            if (false === empty($host)) {
+                $clp_cache_manager->purge_host($host);
+            }
+        }
         $notice = $clp_varnish_cache_admin->get_success_notice('Settings have been saved.');
     }
 }
 
+if (true === isset($_POST['action']) && 'purge-cache' == $_POST['action']) {
+    $purge_values = array_map('trim', array_filter(explode(',', getPostValue('purge-value'))));
+    if (false === empty($purge_values)) {
+        foreach ($purge_values as $purge_value) {
+            $purge_value = trim($purge_value);
+            if (false === empty($purge_value)) {
+                if (true === str_starts_with($purge_value, 'http')) {
+                    $clp_cache_manager->purge_url($purge_value);
+                } else {
+                    $clp_cache_manager->purge_tag($purge_value);
+                }
+            }
+        }
+        $notice = $clp_varnish_cache_admin->get_success_notice('Varnish Cache has been purged.');
+    }
+}
+
 if (true === isset($_GET['action']) && 'purge-entire-cache' == $_GET['action']) {
+    if (false === empty($host)) {
+        $clp_cache_manager->purge_host($host);
+    }
+    $cache_tag_prefix = $clp_cache_manager->get_cache_tag_prefix();
+    if (false === empty($cache_tag_prefix)) {
+        $clp_cache_manager->purge_tag($cache_tag_prefix);
+    }
     $notice = $clp_varnish_cache_admin->get_success_notice('Varnish Cache has been purged.');
 }
 
