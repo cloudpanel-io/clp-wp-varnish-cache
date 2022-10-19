@@ -132,6 +132,10 @@ class ClpVarnishCacheManager {
             $curl_handler = curl_init();
             curl_setopt_array($curl_handler, $curl_option_list);
             curl_exec($curl_handler);
+            $http_status_code = curl_getinfo($curl_handler, CURLINFO_HTTP_CODE);
+            if (200 != $http_status_code) {
+                throw new \Exception(sprintf('HTTP Status Code: %s', $http_status_code));
+            }
             curl_close($curl_handler);
         } catch (\Exception $e) {
             $error_message = $e->getMessage();
