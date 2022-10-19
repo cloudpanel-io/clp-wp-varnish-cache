@@ -176,6 +176,33 @@ $excludes = $clp_cache_manager->get_excludes();
           </div>
         </div>
       </form>
+      <div class="clp-varnish-cache-block">
+        <div class="clp-varnish-cache-block-header">
+          <h3><?php esc_html_e( 'Support', 'clp-varnish-cache' ); ?></h3>
+        </div>
+         <div class="clp-varnish-cache-block-content">
+           <table class="form-table">
+             <tbody>
+               <tr>
+                 <td class="field-name">
+                   <?php esc_html_e( 'Documentation', 'clp-varnish-cache' ); ?>:
+                 </td>
+                 <td>
+                   <a target="_blank" href="https://www.cloudpanel.io/docs/v2/">https://www.cloudpanel.io/docs/v2/</a>
+                 </td>
+               </tr>
+               <tr>
+                 <td class="field-name">
+                   <?php esc_html_e( 'Discord', 'clp-varnish-cache' ); ?>:
+                 </td>
+                 <td>
+                   <a target="_blank" href="https://discord.cloudpanel.io/">https://discord.cloudpanel.io/</a>
+                 </td>
+               </tr>
+             </tbody>
+           </table>
+         </div>
+      </div>
     </div>
   <?php else: ?>
      <?php echo $clp_varnish_cache_admin->get_error_notice('Settings File Not Found!'); ?>
