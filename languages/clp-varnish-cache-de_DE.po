@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: CLP Varnish Cache\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-19 08:32+0000\n"
-"PO-Revision-Date: 2022-10-19 08:46+0000\n"
+"PO-Revision-Date: 2022-10-19 09:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: Deutsch\n"
 "Language: de_DE\n"
@@ -18,28 +18,28 @@ msgstr ""
 #: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:117
 #: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:117
 msgid "Cache Lifetime"
-msgstr "Cache Lifetime DE"
+msgstr ""
 
 #: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:121
 #: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:121
 msgid "Cache Lifetime in seconds before being refreshed."
-msgstr "Cache Lifetime in seconds before being refreshed. DE"
+msgstr ""
 
 #: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:126
 #: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:126
 msgid "Cache Tag Prefix"
-msgstr "Cache Tag Prefix DE"
+msgstr ""
 
 #: ../../../../clp-wp-varnish-cache/class.varnish-cache-admin.php:55
 #: ../../../../clp-wp-varnish-cache/class.varnish-cache-admin.php:58
 #: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/class.varnish-cache-admin.php:55
 #: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/class.varnish-cache-admin.php:58
 msgid "Cache Tags and Urls"
-msgstr "Cache Tags and Urls DE"
+msgstr ""
 
 #. Author of the plugin
 msgid "cloudpanel.io"
-msgstr "cloudpanel.io"
+msgstr ""
 
 #. Name of the plugin
 #: ../../../../clp-wp-varnish-cache/class.varnish-cache-admin.php:27
@@ -56,75 +56,74 @@ msgstr "CLP Varnish Cache DE"
 #: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:101
 #: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:101
 msgid "Enable Varnish Cache"
-msgstr "Enable Varnish Cache DE"
+msgstr ""
 
 #. Description of the plugin
 msgid ""
 "Enable/Disable Varnish Cache, Purge All Pages, Cache Tags, or specific Urls"
 msgstr ""
-"Enable/Disable Varnish Cache, Purge All Pages, Cache Tags, or specific Urls"
 
 #: ../../../../clp-wp-varnish-cache/class.varnish-cache-admin.php:46
 #: ../../../../clp-wp-varnish-cache/class.varnish-cache-admin.php:49
 #: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/class.varnish-cache-admin.php:46
 #: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/class.varnish-cache-admin.php:49
 msgid "Entire Cache"
-msgstr "Entire Cache"
+msgstr ""
 
 #: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:134
 #: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:134
 msgid "Excluded Params"
-msgstr "Excluded Params DE"
+msgstr ""
 
 #: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:143
 #: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:143
 msgid "Excludes"
-msgstr "Excludes"
+msgstr ""
 
 #. Author URI of the plugin
 msgid "https://www.cloudpanel.io"
-msgstr "https://www.cloudpanel.io"
+msgstr ""
 
 #: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:138
 #: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:138
 msgid "List of GET parameters, separated by a comma, to disable caching."
-msgstr "List of GET parameters, separated by a comma, to disable caching."
+msgstr ""
 
 #: ../../../../clp-wp-varnish-cache/class.varnish-cache-admin.php:40
 #: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/class.varnish-cache-admin.php:40
 msgid "Purge"
-msgstr "Purge"
+msgstr ""
 
 #: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:160
 #: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:175
 #: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:160
 #: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:175
 msgid "Purge Cache"
-msgstr "Purge Cache"
+msgstr ""
 
 #: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:153
 #: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:153
 msgid "Save"
-msgstr "Speichern"
+msgstr ""
 
 #: ../../../../clp-wp-varnish-cache/class.varnish-cache-admin.php:64
 #: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:94
 #: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/class.varnish-cache-admin.php:64
 #: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:94
 msgid "Settings"
-msgstr "Settings"
+msgstr ""
 
 #: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:147
 #: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:147
 msgid "Urls and files that Varnish Cache shouldn't cache."
-msgstr "Urls and files that Varnish Cache shouldn't cache."
+msgstr ""
 
 #: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:109
 #: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:109
 msgid "Varnish Server"
-msgstr "Varnish Server DE"
+msgstr ""
 
 #: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:169
 #: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:169
 msgid "You can purge single urls or tags separated by comma."
-msgstr "You can purge single urls or tags separated by comma."
+msgstr ""
