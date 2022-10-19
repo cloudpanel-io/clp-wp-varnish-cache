@@ -12,6 +12,7 @@ class ClpVarnishCacheAdmin {
     public function init() {
         add_action('admin_bar_menu', array($this, 'add_adminbar'), 100);
         add_action('admin_menu', array($this, 'add_admin_menu'), 100);
+        add_action('network_admin_menu', array($this, 'add_admin_menu'), 100);
         add_action('admin_enqueue_scripts', array($this, 'add_css'));
     }
 
@@ -74,14 +75,26 @@ class ClpVarnishCacheAdmin {
     }
 
     public function add_admin_menu() {
-        add_submenu_page(
-            'options-general.php',
-            __( 'CLP Varnish Cache', 'clp-varnish-cache' ),
-            __( 'CLP Varnish Cache', 'clp-varnish-cache' ),
-            'manage_options',
-            'clp-varnish-cache',
-            array( &$this, 'clp_varnish_cache_page' )
-        );
+        $is_network = is_multisite() && is_network_admin();
+        if (true === $is_network) {
+            add_submenu_page(
+                'settings.php',
+                __( 'CLP Varnish Cache', 'clp-varnish-cache' ),
+                __( 'CLP Varnish Cache', 'clp-varnish-cache' ),
+                'manage_options',
+                'clp-varnish-cache',
+                array( &$this, 'clp_varnish_cache_page' )
+            );
+        } else {
+            add_submenu_page(
+                'options-general.php',
+                __( 'CLP Varnish Cache', 'clp-varnish-cache' ),
+                __( 'CLP Varnish Cache', 'clp-varnish-cache' ),
+                'manage_options',
+                'clp-varnish-cache',
+                array( &$this, 'clp_varnish_cache_page' )
+            );
+        }
     }
 
     public function clp_varnish_cache_page() {

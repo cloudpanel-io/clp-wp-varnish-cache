@@ -188,7 +188,7 @@ $excludes = $clp_cache_manager->get_excludes();
                    <?php esc_html_e( 'Documentation', 'clp-varnish-cache' ); ?>:
                  </td>
                  <td>
-                   <a target="_blank" href="https://www.cloudpanel.io/docs/v2/">https://www.cloudpanel.io/docs/v2/</a>
+                   <a target="_blank" href="https://www.cloudpanel.io/docs/v2/frontend-area/varnish-cache/wordpress/plugin/">https://www.cloudpanel.io/docs/v2/frontend-area/varnish-cache/wordpress/plugin/</a>
                  </td>
                </tr>
                <tr>
