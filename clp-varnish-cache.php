@@ -2,7 +2,7 @@
 /*
  * Plugin Name: CLP Varnish Cache
  * Description: Enable/Disable Varnish Cache, Purge All Pages, Cache Tags, or specific Urls
- * Version: 0.0.2
+ * Version: 0.0.3
  * Requires at least: 5.0
  * Requires PHP: 7.1
  * Author: cloudpanel.io
