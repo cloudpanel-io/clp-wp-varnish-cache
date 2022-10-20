@@ -1,0 +1,128 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: CLP Varnish Cache\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-19 08:32+0000\n"
+"PO-Revision-Date: 2022-10-21 00:09+0300\n"
+"Last-Translator: Mertcan GÖKGÖZ <mertcan.gokgoz@gmail.com>\n"
+"Language-Team: \n"
+"Language: tr_TR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.1.1\n"
+"X-Loco-Version: 2.6.2; wp-6.0.3\n"
+"X-Domain: clp-varnish-cache\n"
+
+#: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:117
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:117
+msgid "Cache Lifetime"
+msgstr "Önbellek Ömrü"
+
+#: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:121
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:121
+msgid "Cache Lifetime in seconds before being refreshed."
+msgstr "Yenilenmeden önce saniye cinsinden önbellek ömrü."
+
+#: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:126
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:126
+msgid "Cache Tag Prefix"
+msgstr "Önbellek Etiketi Öneki"
+
+#: ../../../../clp-wp-varnish-cache/class.varnish-cache-admin.php:55
+#: ../../../../clp-wp-varnish-cache/class.varnish-cache-admin.php:58
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/class.varnish-cache-admin.php:55
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/class.varnish-cache-admin.php:58
+msgid "Cache Tags and Urls"
+msgstr "Önbellek Etiketleri ve URL'ler"
+
+#. Author of the plugin
+msgid "cloudpanel.io"
+msgstr "cloudpanel.io"
+
+#. Name of the plugin
+#: ../../../../clp-wp-varnish-cache/class.varnish-cache-admin.php:27
+#: ../../../../clp-wp-varnish-cache/class.varnish-cache-admin.php:79
+#: ../../../../clp-wp-varnish-cache/class.varnish-cache-admin.php:80
+#: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:83
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/class.varnish-cache-admin.php:27
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/class.varnish-cache-admin.php:79
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/class.varnish-cache-admin.php:80
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:83
+msgid "CLP Varnish Cache"
+msgstr "CLP Varnish Cache"
+
+#: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:101
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:101
+msgid "Enable Varnish Cache"
+msgstr "Varnish Önbelleğini Etkinleştir"
+
+#. Description of the plugin
+msgid "Enable/Disable Varnish Cache, Purge All Pages, Cache Tags, or specific Urls"
+msgstr "Varnish Önbelleğini Etkinleştirme/Devre Dışı Bırakma, Tüm Sayfaları Temizle, Önbellek Etiketlerini veya belirli URL'leri Temizleme"
+
+#: ../../../../clp-wp-varnish-cache/class.varnish-cache-admin.php:46
+#: ../../../../clp-wp-varnish-cache/class.varnish-cache-admin.php:49
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/class.varnish-cache-admin.php:46
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/class.varnish-cache-admin.php:49
+msgid "Entire Cache"
+msgstr "Tüm Önbellek"
+
+#: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:134
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:134
+msgid "Excluded Params"
+msgstr "Hariç Tutulan Paramlar"
+
+#: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:143
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:143
+msgid "Excludes"
+msgstr "Hariçler"
+
+#. Author URI of the plugin
+msgid "https://www.cloudpanel.io"
+msgstr "https://www.cloudpanel.io"
+
+#: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:138
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:138
+msgid "List of GET parameters, separated by a comma, to disable caching."
+msgstr "Önbelleğe almayı devre dışı bırakmak için virgülle ayrılmış GET parametrelerinin listesi."
+
+#: ../../../../clp-wp-varnish-cache/class.varnish-cache-admin.php:40
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/class.varnish-cache-admin.php:40
+msgid "Purge"
+msgstr "Temizle"
+
+#: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:160
+#: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:175
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:160
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:175
+msgid "Purge Cache"
+msgstr "Önbelleği Temizle"
+
+#: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:153
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:153
+msgid "Save"
+msgstr "Kaydet"
+
+#: ../../../../clp-wp-varnish-cache/class.varnish-cache-admin.php:64
+#: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:94
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/class.varnish-cache-admin.php:64
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:94
+msgid "Settings"
+msgstr "Ayarlar"
+
+#: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:147
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:147
+msgid "Urls and files that Varnish Cache shouldn't cache."
+msgstr "Varnish önbelleğinin önbelleğe almaması gereken URL'ler ve dosyalar."
+
+#: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:109
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:109
+msgid "Varnish Server"
+msgstr "Varnish Sunucusu"
+
+#: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:169
+#: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:169
+msgid "You can purge single urls or tags separated by comma."
+msgstr "Tek url'leri veya virgülle ayrılmış etiketleri temizleyebilirsiniz."
