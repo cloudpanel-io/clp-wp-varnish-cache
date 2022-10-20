@@ -9,6 +9,8 @@
  * Requires PHP: 7.1
  * Author: cloudpanel.io
  * Author URI: https://www.cloudpanel.io
+ * GitHub Plugin URI: https://github.com/cloudpanel-io/clp-wp-varnish-cache
+ * GitHub Branch:     master
  */
 
 if (false ===  function_exists('add_action')) {
