@@ -14,6 +14,25 @@ class ClpVarnishCacheAdmin {
         add_action('admin_menu', array($this, 'add_admin_menu'), 100);
         add_action('network_admin_menu', array($this, 'add_admin_menu'), 100);
         add_action('admin_enqueue_scripts', array($this, 'add_css'));
+        $this->check_entire_cache_purge();
+    }
+
+    private function check_entire_cache_purge() {
+        if (true === isset($_GET['clp-varnish-cache']) && 'purge-entire-cache' == $_GET['clp-varnish-cache']) {
+            $host = (true === isset($_SERVER['HTTP_HOST']) && false === empty(trim($_SERVER['HTTP_HOST'])) ? trim($_SERVER['HTTP_HOST']) : '');
+            if (false === empty($host)) {
+                $this->clp_varnish_cache_manager->purge_host($host);
+            }
+            $cache_tag_prefix = $this->clp_varnish_cache_manager->get_cache_tag_prefix();
+            if (false === empty($cache_tag_prefix)) {
+                $this->clp_varnish_cache_manager->purge_tag($cache_tag_prefix);
+            }
+            add_action('admin_notices', array( $this, 'admin_entire_cache_purge'));
+        }
+    }
+
+    public function admin_entire_cache_purge() {
+        echo '<div id="noice" class="notice notice-success fade is-dismissible"><p><strong>' . esc_html__( 'Varnish Cache has been purged.', 'clp-varnish-cache' ) . '</strong></p></div>';
     }
 
     public function get_clp_cache_manager() {
@@ -45,7 +64,7 @@ class ClpVarnishCacheAdmin {
                         'parent' => 'clp-varnish-cache-purge',
                         'id'     => 'clp-varnish-cache-purge-entire-cache',
                         'title'  => __( 'Entire Cache', 'clp-varnish-cache' ),
-                        'href'   => (true === $is_network ? network_admin_url('settings.php?page=clp-varnish-cache&action=purge-entire-cache') : admin_url('options-general.php?page=clp-varnish-cache&action=purge-entire-cache')),
+                        'href'   => wp_nonce_url(add_query_arg('clp-varnish-cache', 'purge-entire-cache'), 'purge-entire-cache'),
                         'meta'   => [
                             'title' => __( 'Entire Cache', 'clp-varnish-cache' ),
                         ],
