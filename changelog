@@ -1,2 +1,5 @@
+0.0.2 Stefan Wieczorek <stefan.wieczorek@cloudpanel.io> Fri, 21 Oct 2022 08:08:08
+- The page doesn't get changed when purging the entire cache
+
 0.0.1 Stefan Wieczorek <stefan.wieczorek@cloudpanel.io> Thu, 20 Oct 2022 08:08:08
 - Initial Version
