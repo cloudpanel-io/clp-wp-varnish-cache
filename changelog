@@ -1,3 +1,6 @@
+0.0.3 Stefan Wieczorek <stefan.wieczorek@cloudpanel.io> Mon, 21 Nov 2022 08:08:08
+- Replace curl requests with wp_remote_request
+
 0.0.2 Stefan Wieczorek <stefan.wieczorek@cloudpanel.io> Fri, 21 Oct 2022 08:08:08
 - The page doesn't get changed when purging the entire cache
 
