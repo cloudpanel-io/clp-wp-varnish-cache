@@ -86,7 +86,7 @@ $excludes = $clp_cache_manager->get_excludes();
 <div class="clp-varnish-cache-container">
   <?php if (false === empty($clp_cache_settings)): ?>
     <?php if (false === is_null($notice)): ?>
-      <?php echo esc_html($notice); ?>
+      <?php echo $notice; ?>
     <?php endif; ?>
     <div class="clp-varnish-cache-block-container">
       <form action="<?php echo (true === $is_network ? network_admin_url('settings.php?page=clp-varnish-cache') : admin_url('options-general.php?page=clp-varnish-cache')) ?>" method="post">
