@@ -120,23 +120,22 @@ class ClpVarnishCacheManager {
             if (true === is_null($request_url)) {
                 $request_url = $this->get_server();
             }
-            $curl_option_list = [
-                CURLOPT_URL               => $request_url,
-                CURLOPT_HTTPHEADER        => $headers,
-                CURLOPT_CUSTOMREQUEST     => 'PURGE',
-                CURLOPT_VERBOSE           => true,
-                CURLOPT_RETURNTRANSFER    => true,
-                CURLOPT_NOBODY            => true,
-                CURLOPT_CONNECTTIMEOUT_MS => 2000,
-            ];
-            $curl_handler = curl_init();
-            curl_setopt_array($curl_handler, $curl_option_list);
-            curl_exec($curl_handler);
-            $http_status_code = curl_getinfo($curl_handler, CURLINFO_HTTP_CODE);
+            $request_url = sprintf('http://%s', $request_url);
+            $response = wp_remote_request(
+                $request_url,
+                [
+                    'sslverify' => false,
+                    'method'    => 'PURGE',
+                    'headers'   => $headers,
+                ]
+            );
+            $http_status_code = 0;
+            if (true === isset($response['response']['code'])) {
+                $http_status_code = $response['response']['code'];
+            }
             if (200 != $http_status_code) {
                 throw new \Exception(sprintf('HTTP Status Code: %s', $http_status_code));
             }
-            curl_close($curl_handler);
         } catch (\Exception $e) {
             $error_message = $e->getMessage();
             echo sprintf('Varnish Cache Purge Failed, Error Message: %s', $error_message);

@@ -18,7 +18,7 @@ if (false ===  function_exists('add_action')) {
     exit;
 }
 
-define('CLP_VARNISH_VERSION', '0.0.2');
+define('CLP_VARNISH_VERSION', '0.0.3');
 $is_admin = is_admin();
 
 if (true === $is_admin) {
