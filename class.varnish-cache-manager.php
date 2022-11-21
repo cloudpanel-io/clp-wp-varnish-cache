@@ -68,7 +68,7 @@ class ClpVarnishCacheManager {
     public function purge_host($host): void
     {
         $headers = [
-            sprintf('Host:%s', $host)
+           'Host' => $host
         ];
         $this->purge($headers);
     }
@@ -81,7 +81,7 @@ class ClpVarnishCacheManager {
     public function purge_tags(array $tags): void
     {
         $headers = [
-            sprintf('X-Cache-Tags:%s', implode(',', $tags)),
+            'X-Cache-Tags' => implode(',', $tags)
         ];
         $this->purge($headers);
     }
@@ -106,7 +106,7 @@ class ClpVarnishCacheManager {
                 }
             }
             $headers = [
-                sprintf('Host:%s', $host)
+                'Host' => $host
             ];
             $this->purge($headers, $request_url);
         } else {

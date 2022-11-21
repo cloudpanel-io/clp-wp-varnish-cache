@@ -2,7 +2,7 @@
 /*
  * Plugin Name: CLP Varnish Cache
  * Description: Varnish Cache Plugin by cloudpanel.io
- * Version: 0.0.2
+ * Version: 0.0.3
  * Text Domain: clp-varnish-cache
  * Domain Path: /languages
  * Requires at least: 6.0
@@ -10,7 +10,7 @@
  * Author: cloudpanel.io
  * Author URI: https://www.cloudpanel.io
  * GitHub Plugin URI: https://github.com/cloudpanel-io/clp-wp-varnish-cache
- * GitHub Branch:     master
+ * GitHub Branch: master
  */
 
 if (false ===  function_exists('add_action')) {

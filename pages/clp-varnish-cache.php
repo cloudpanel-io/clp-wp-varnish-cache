@@ -3,23 +3,24 @@
 global $clp_varnish_cache_admin;
 $is_network = is_multisite() && is_network_admin();
 $notice = null;
-$host = (true === isset($_SERVER['HTTP_HOST']) && false === empty(trim($_SERVER['HTTP_HOST'])) ? trim($_SERVER['HTTP_HOST']) : '');
+$host = (true === isset($_SERVER['HTTP_HOST']) && false === empty(sanitize_text_field($_SERVER['HTTP_HOST'])) ? sanitize_text_field($_SERVER['HTTP_HOST']) : '');
 
 function getPostValue($key) {
-    $postValue = (true === isset($_POST[$key]) && false === empty(trim($_POST[$key])) ? $_POST[$key] : '');
+    $postValue = (true === isset($_POST[$key]) && false === empty(sanitize_text_field($_POST[$key])) ? sanitize_text_field($_POST[$key]) : '');
     return $postValue;
 }
 
 $clp_cache_manager = $clp_varnish_cache_admin->get_clp_cache_manager();
 
-if (true === isset($_POST['action']) && 'save-settings' == $_POST['action']) {
+if (true === isset($_POST['action']) && 'save-settings' == sanitize_text_field($_POST['action'])) {
     $old_cache_tag_prefix = $clp_cache_manager->get_cache_tag_prefix();
     $enabled = (1 == getPostValue('enabled')  ? true : false);
     $server = getPostValue('server');
     $cache_lifetime = getPostValue('cache-lifetime');
     $cache_tag_prefix = getPostValue('cache-tag-prefix');
     $excluded_params = array_map('trim', array_filter(explode(',', getPostValue('excluded-params'))));
-    $excludes = array_map('trim', array_filter(explode(PHP_EOL, getPostValue('excludes'))));
+    $excludes = (true === isset($_POST['excludes']) ? sanitize_textarea_field($_POST['excludes']) : '');
+    $excludes = array_map('trim', array_filter(explode(PHP_EOL, $excludes)));
     if (false === empty($server) && false === empty($cache_lifetime) && false === empty($cache_tag_prefix)) {
         $cache_settings = [
             'enabled'        => $enabled,
@@ -43,7 +44,7 @@ if (true === isset($_POST['action']) && 'save-settings' == $_POST['action']) {
     }
 }
 
-if (true === isset($_POST['action']) && 'purge-cache' == $_POST['action']) {
+if (true === isset($_POST['action']) && 'purge-cache' == sanitize_text_field($_POST['action'])) {
     $purge_values = array_map('trim', array_filter(explode(',', getPostValue('purge-value'))));
     if (false === empty($purge_values)) {
         foreach ($purge_values as $purge_value) {
@@ -60,7 +61,7 @@ if (true === isset($_POST['action']) && 'purge-cache' == $_POST['action']) {
     }
 }
 
-if (true === isset($_GET['action']) && 'purge-entire-cache' == $_GET['action']) {
+if (true === isset($_GET['action']) && 'purge-entire-cache' == sanitize_text_field($_GET['action'])) {
     if (false === empty($host)) {
         $clp_cache_manager->purge_host($host);
     }
@@ -85,7 +86,7 @@ $excludes = $clp_cache_manager->get_excludes();
 <div class="clp-varnish-cache-container">
   <?php if (false === empty($clp_cache_settings)): ?>
     <?php if (false === is_null($notice)): ?>
-      <?php echo $notice; ?>
+      <?php echo esc_html($notice); ?>
     <?php endif; ?>
     <div class="clp-varnish-cache-block-container">
       <form action="<?php echo (true === $is_network ? network_admin_url('settings.php?page=clp-varnish-cache') : admin_url('options-general.php?page=clp-varnish-cache')) ?>" method="post">
@@ -109,7 +110,7 @@ $excludes = $clp_cache_manager->get_excludes();
                     <?php esc_html_e( 'Varnish Server', 'clp-varnish-cache' ); ?>:
                   </td>
                   <td>
-                    <input type="text" name="server" required="required" value="<?php echo $server; ?>" />
+                    <input type="text" name="server" required="required" value="<?php echo esc_html($server); ?>" />
                   </td>
                 </tr>
                 <tr>
@@ -117,7 +118,7 @@ $excludes = $clp_cache_manager->get_excludes();
                     <?php esc_html_e( 'Cache Lifetime', 'clp-varnish-cache' ); ?>:
                   </td>
                   <td>
-                    <input type="text" name="cache-lifetime" required="required" value="<?php echo $cache_lifetime; ?>" />
+                    <input type="text" name="cache-lifetime" required="required" value="<?php echo esc_html($cache_lifetime); ?>" />
                     <p class="description"><?php esc_html_e( 'Cache Lifetime in seconds before being refreshed.', 'clp-varnish-cache' ); ?></p>
                   </td>
                 </tr>
@@ -126,7 +127,7 @@ $excludes = $clp_cache_manager->get_excludes();
                     <?php esc_html_e( 'Cache Tag Prefix', 'clp-varnish-cache' ); ?>:
                   </td>
                   <td>
-                    <input type="text" name="cache-tag-prefix" required="required" value="<?php echo $cache_tag_prefix; ?>" />
+                    <input type="text" name="cache-tag-prefix" required="required" value="<?php echo esc_html($cache_tag_prefix); ?>" />
                   </td>
                 </tr>
                 <tr>
@@ -134,7 +135,7 @@ $excludes = $clp_cache_manager->get_excludes();
                     <?php esc_html_e( 'Excluded Params', 'clp-varnish-cache' ); ?>:
                   </td>
                   <td>
-                    <input type="text" name="excluded-params" value="<?php echo $excluded_params; ?>" />
+                    <input type="text" name="excluded-params" value="<?php echo esc_html($excluded_params); ?>" />
                     <p class="description"><?php esc_html_e( 'List of GET parameters, separated by a comma, to disable caching.', 'clp-varnish-cache' ); ?></p>
                   </td>
                 </tr>
@@ -143,7 +144,7 @@ $excludes = $clp_cache_manager->get_excludes();
                     <?php esc_html_e( 'Excludes', 'clp-varnish-cache' ); ?>:
                   </td>
                   <td>
-                    <textarea name="excludes" rows="6"><?php echo $excludes; ?></textarea>
+                    <textarea name="excludes" rows="6"><?php echo esc_textarea($excludes); ?></textarea>
                     <p class="description"><?php esc_html_e( 'Urls and files that Varnish Cache shouldn\'t cache.', 'clp-varnish-cache' ); ?></p>
                   </td>
                 </tr>

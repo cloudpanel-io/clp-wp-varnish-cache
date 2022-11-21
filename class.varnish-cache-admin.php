@@ -19,7 +19,7 @@ class ClpVarnishCacheAdmin {
 
     private function check_entire_cache_purge() {
         if (true === isset($_GET['clp-varnish-cache']) && 'purge-entire-cache' == sanitize_text_field($_GET['clp-varnish-cache'])) {
-            $host = (true === isset($_SERVER['HTTP_HOST']) && false === empty(trim($_SERVER['HTTP_HOST'])) ? trim($_SERVER['HTTP_HOST']) : '');
+            $host = (true === isset($_SERVER['HTTP_HOST']) && false === empty(sanitize_text_field($_SERVER['HTTP_HOST'])) ? sanitize_text_field($_SERVER['HTTP_HOST']) : '');
             if (false === empty($host)) {
                 $this->clp_varnish_cache_manager->purge_host($host);
             }
