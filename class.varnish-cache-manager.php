@@ -138,7 +138,7 @@ class ClpVarnishCacheManager {
             }
         } catch (\Exception $e) {
             $error_message = $e->getMessage();
-            echo sprintf('Varnish Cache Purge Failed, Error Message: %s', $error_message);
+            echo sprintf('Varnish Cache Purge Failed, Error Message: %s', esc_html__($error_message, 'clp-varnish-cache'));
             exit();
         }
     }
