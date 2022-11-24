@@ -122,16 +122,6 @@ class ClpVarnishCacheAdmin {
         include $varnish_cache_page_path;
     }
 
-    public function get_success_notice($text) {
-        $notice = '<div id="notice" class="notice notice-success fade is-dismissible"><p><strong>' . esc_html__($text, 'clp-varnish-cache') . '</strong></p></div>';
-        return $notice;
-    }
-
-    public function get_error_notice($text) {
-        $notice = '<div id="notice" class="notice notice-error fade is-dismissible"><p><strong>' . esc_html__($text, 'clp-varnish-cache') . '</strong></p></div>';
-        return $notice;
-    }
-
     public function add_css() {
         if (true === is_user_logged_in() && true === is_admin_bar_showing() ) {
             wp_register_style('clp-varnish-cache', plugins_url('style.css', __FILE__), false, CLP_VARNISH_VERSION);

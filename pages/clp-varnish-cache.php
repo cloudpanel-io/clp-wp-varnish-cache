@@ -2,7 +2,8 @@
 
 global $clp_varnish_cache_admin;
 $is_network = is_multisite() && is_network_admin();
-$notice = null;
+$successNotice = null;
+$errorNotice = null;
 $host = (true === isset($_SERVER['HTTP_HOST']) && false === empty(sanitize_text_field($_SERVER['HTTP_HOST'])) ? sanitize_text_field($_SERVER['HTTP_HOST']) : '');
 
 function getPostValue($key) {
@@ -40,7 +41,7 @@ if (true === isset($_POST['action']) && 'save-settings' == sanitize_text_field($
                 $clp_cache_manager->purge_host($host);
             }
         }
-        $notice = $clp_varnish_cache_admin->get_success_notice('Settings have been saved.');
+        $successNotice = 'Settings have been saved.';
     }
 }
 
@@ -57,7 +58,7 @@ if (true === isset($_POST['action']) && 'purge-cache' == sanitize_text_field($_P
                 }
             }
         }
-        $notice = $clp_varnish_cache_admin->get_success_notice('Varnish Cache has been purged.');
+        $successNotice = 'Varnish Cache has been purged.';
     }
 }
 
@@ -69,7 +70,7 @@ if (true === isset($_GET['action']) && 'purge-entire-cache' == sanitize_text_fie
     if (false === empty($cache_tag_prefix)) {
         $clp_cache_manager->purge_tag($cache_tag_prefix);
     }
-    $notice = $clp_varnish_cache_admin->get_success_notice('Varnish Cache has been purged.');
+    $successNotice = 'Varnish Cache has been purged.';
 }
 
 $clp_cache_settings = $clp_cache_manager->get_cache_settings();
@@ -85,8 +86,15 @@ $excludes = $clp_cache_manager->get_excludes();
 
 <div class="clp-varnish-cache-container">
   <?php if (false === empty($clp_cache_settings)): ?>
-    <?php if (false === is_null($notice)): ?>
-      <?php echo $notice; ?>
+    <?php if (false === is_null($successNotice)): ?>
+      <div id="notice" class="notice notice-success fade is-dismissible">
+        <p><strong><?php echo esc_html__($successNotice, 'clp-varnish-cache'); ?></strong></p>
+      </div>
+    <?php endif; ?>
+    <?php if (false === is_null($errorNotice)): ?>
+      <div id="notice" class="notice notice-error fade is-dismissible">
+        <p><strong><?php echo esc_html__($errorNotice, 'clp-varnish-cache'); ?></strong></p>
+      </div>
     <?php endif; ?>
     <div class="clp-varnish-cache-block-container">
       <form action="<?php echo (true === $is_network ? network_admin_url('settings.php?page=clp-varnish-cache') : admin_url('options-general.php?page=clp-varnish-cache')) ?>" method="post">
@@ -206,6 +214,8 @@ $excludes = $clp_cache_manager->get_excludes();
       </div>
     </div>
   <?php else: ?>
-     <?php echo $clp_varnish_cache_admin->get_error_notice('Settings File Not Found!'); ?>
+    <div id="notice" class="notice notice-error fade is-dismissible">
+      <p><strong><?php echo esc_html__('Settings File Not Found!', 'clp-varnish-cache'); ?></strong></p>
+    </div>
   <?php endif ?>
 </div>

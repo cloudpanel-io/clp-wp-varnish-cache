@@ -1,3 +1,6 @@
+0.0.4 Stefan Wieczorek <stefan.wieczorek@cloudpanel.io> Thu, 24 Nov 2022 08:08:08
+- Escape $notice variable
+
 0.0.3 Stefan Wieczorek <stefan.wieczorek@cloudpanel.io> Mon, 21 Nov 2022 08:08:08
 - Replace curl requests with wp_remote_request
 
