@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION='0.0.4'
+VERSION='0.0.5'
 TMP_DIRECTORY='tmp'
 TMP_RELEASE_DIRECTORY='tmp/clp-varnish-cache/'
 rm -rf $TMP_DIRECTORY
