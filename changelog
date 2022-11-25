@@ -1,5 +1,5 @@
 0.0.5 Stefan Wieczorek <stefan.wieczorek@cloudpanel.io> Fri, 25 Nov 2022 08:08:08
-- Fix translation escaping
+- Escape exception message
 
 0.0.4 Stefan Wieczorek <stefan.wieczorek@cloudpanel.io> Thu, 24 Nov 2022 08:08:08
 - Escape $notice variable
