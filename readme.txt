@@ -4,9 +4,10 @@ Tags: varnish, varnish cache, cache, caching
 Requires at least: 6.0
 Tested up to: 6.1
 Requires PHP: 7.1
-Stable tag: 0.0.5
+Stable tag: 1.0.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
+SVN Repository: http://plugins.svn.wordpress.org/clp-varnish-cache/
 
 CLP Varnish Cache lets you configure the cache lifetime, paths, and parameters to exclude from caching.
 You can purge single urls or cache entries by cache tag.

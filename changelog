@@ -1,14 +1,2 @@
-0.0.5 Stefan Wieczorek <stefan.wieczorek@cloudpanel.io> Fri, 25 Nov 2022 08:08:08
-- Escape exception message
-
-0.0.4 Stefan Wieczorek <stefan.wieczorek@cloudpanel.io> Thu, 24 Nov 2022 08:08:08
-- Escape $notice variable
-
-0.0.3 Stefan Wieczorek <stefan.wieczorek@cloudpanel.io> Mon, 21 Nov 2022 08:08:08
-- Replace curl requests with wp_remote_request
-
-0.0.2 Stefan Wieczorek <stefan.wieczorek@cloudpanel.io> Fri, 21 Oct 2022 08:08:08
-- The page doesn't get changed when purging the entire cache
-
-0.0.1 Stefan Wieczorek <stefan.wieczorek@cloudpanel.io> Thu, 20 Oct 2022 08:08:08
+1.0.0 Stefan Wieczorek <stefan.wieczorek@cloudpanel.io> Mon, 28 Nov 2022 08:08:08
 - Initial Version
