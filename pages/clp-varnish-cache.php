@@ -22,6 +22,7 @@ if (true === isset($_POST['action']) && 'save-settings' == sanitize_text_field($
     $excluded_params = array_map('trim', array_filter(explode(',', getPostValue('excluded-params'))));
     $excludes = (true === isset($_POST['excludes']) ? sanitize_textarea_field($_POST['excludes']) : '');
     $excludes = array_map('trim', array_filter(explode(PHP_EOL, $excludes)));
+    $clear_on_updates = (1 == getPostValue('clear-on-updates')  ? true : false);
     if (false === empty($server) && false === empty($cache_lifetime) && false === empty($cache_tag_prefix)) {
         $cache_settings = [
             'enabled'        => $enabled,
@@ -30,6 +31,7 @@ if (true === isset($_POST['action']) && 'save-settings' == sanitize_text_field($
             'cacheLifetime'  => $cache_lifetime,
             'excludes'       => $excludes,
             'excludedParams' => $excluded_params,
+            'clearOnUpdates' => $clear_on_updates,
         ];
         $clp_cache_manager->write_cache_settings($cache_settings);
         $clp_cache_manager->reset_cache_settings();
@@ -80,6 +82,7 @@ $cache_lifetime = $clp_cache_manager->get_cache_lifetime();
 $cache_tag_prefix = $clp_cache_manager->get_cache_tag_prefix();
 $excluded_params = $clp_cache_manager->get_excluded_params();
 $excludes = $clp_cache_manager->get_excludes();
+$clear_on_updates = $clp_cache_manager->should_clear_on_updates();
 
 ?>
 <h1 id="clp-varnish-cache"><?php esc_html_e( 'CLP Varnish Cache', 'clp-varnish-cache' ); ?></h1>
@@ -154,6 +157,15 @@ $excludes = $clp_cache_manager->get_excludes();
                   <td>
                     <textarea name="excludes" rows="6"><?php echo esc_textarea($excludes); ?></textarea>
                     <p class="description"><?php esc_html_e( 'Urls and files that Varnish Cache shouldn\'t cache.', 'clp-varnish-cache' ); ?></p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="field-name">
+                    <?php esc_html_e( 'Clear cache on updates', 'clp-varnish-cache' ); ?>:
+                  </td>
+                  <td>
+                    <input type="checkbox" name="clear-on-updates" <?php echo (true === $clear_on_updates ? 'checked' : ''); ?> value="1" />
+                    <p class="description"><?php esc_html_e( 'Automatically clear cache when an update of core, theme or plugin has been performed.', 'clp-varnish-cache' ); ?></p>
                   </td>
                 </tr>
               </tbody>
