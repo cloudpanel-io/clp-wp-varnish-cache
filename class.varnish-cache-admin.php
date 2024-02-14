@@ -14,6 +14,7 @@ class ClpVarnishCacheAdmin {
         add_action('admin_menu', array($this, 'add_admin_menu'), 100);
         add_action('network_admin_menu', array($this, 'add_admin_menu'), 100);
         add_action('admin_enqueue_scripts', array($this, 'add_css'));
+        add_action('upgrader_process_complete', array($this, 'clear_cache_on_updates'), 10, 2);
         $this->check_entire_cache_purge();
     }
 
@@ -143,5 +144,29 @@ class ClpVarnishCacheAdmin {
             return 'data:image/svg+xml;base64,' . base64_encode($svg);
         }
         return $svg;
+    }
+
+    public function clear_cache_on_updates($upgrader_object, $options) {
+        
+        // Return if not called because of an update to WordPress core, a plugin, a theme or a bulk update.
+        if ('update' !== $options['action'] && 'bulk-update' !== $options['action']) {
+            return;
+        }
+
+        $varnish_cache_manager = $this->get_clp_cache_manager();
+
+        // Check if Varnish Cache is enabled and should be cleared on updates
+        if (true === $varnish_cache_manager->is_enabled() && true === $varnish_cache_manager->should_clear_on_updates()) {
+
+            $site_url = get_site_url();
+            $parsed_url = parse_url($site_url);
+            $host = $parsed_url['host'];
+            try {
+                $varnish_cache_manager->purge_host($host);
+                error_log('Varnish Cache has been purged for host: ' . $host);
+            } catch (\Throwable $th) {
+                error_log('Error while trying to automatically purge host cache: ' . $th);
+            }
+        }
     }
 }
