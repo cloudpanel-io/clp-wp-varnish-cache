@@ -55,6 +55,12 @@ class ClpVarnishCacheManager {
         return $this->cache_settings;
     }
 
+    public function should_clear_on_updates() {
+        $settings = $this->get_cache_settings();
+        $should_clear = (true === isset($settings['clearOnUpdates']) && true === $settings['clearOnUpdates'] ? true : false);
+        return $should_clear;
+    }
+
     public function write_cache_settings(array $settings) {
         $settings_file = sprintf('%s/.varnish-cache/settings.json', rtrim(getenv('HOME'), '/'));
         $settings = json_encode($settings, JSON_PRETTY_PRINT);
