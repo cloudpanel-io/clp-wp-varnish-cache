@@ -165,7 +165,7 @@ $clear_on_updates = $clp_cache_manager->should_clear_on_updates();
                   </td>
                   <td>
                     <input type="checkbox" name="clear-on-updates" <?php echo (true === $clear_on_updates ? 'checked' : ''); ?> value="1" />
-                    <p class="description"><?php esc_html_e( 'Automatically clear cache when an update of core, theme or plugin has been performed.', 'clp-varnish-cache' ); ?></p>
+                    <p class="description"><?php esc_html_e( 'Automatically clear the cache when an update of WordPress Core, a theme or a plugin has been performed.', 'clp-varnish-cache' ); ?></p>
                   </td>
                 </tr>
               </tbody>
