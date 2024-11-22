@@ -55,6 +55,18 @@ class ClpVarnishCacheManager {
         return $this->cache_settings;
     }
 
+    public function should_clear_on_updates() {
+        $settings = $this->get_cache_settings();
+        $should_clear = (true === isset($settings['clearOnUpdates']) && true === $settings['clearOnUpdates'] ? true : false);
+        return $should_clear;
+    }
+
+    public function clear_on_post_page_update() {
+        $settings = $this->get_cache_settings();
+        $clear_post_page = (true === isset($settings['clearOnPostPageUpdate']) && true === $settings['clearOnPostPageUpdate'] ? true : false);
+        return $clear_post_page;
+    }
+
     public function write_cache_settings(array $settings) {
         $settings_file = sprintf('%s/.varnish-cache/settings.json', rtrim(getenv('HOME'), '/'));
         $settings = json_encode($settings, JSON_PRETTY_PRINT);

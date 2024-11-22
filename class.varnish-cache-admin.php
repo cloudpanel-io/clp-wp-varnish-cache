@@ -144,4 +144,5 @@ class ClpVarnishCacheAdmin {
         }
         return $svg;
     }
+
 }
