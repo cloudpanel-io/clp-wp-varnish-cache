@@ -22,8 +22,7 @@ class ClpVarnishCacheAdmin {
             if (false === current_user_can('manage_options')) {                                   
                 return;                                                                           
             }                                                                                     
-            if (false === isset($_GET['_wpnonce']) || false === wp_verify_nonce(sanitize_te       
-         +xt_field($_GET['_wpnonce']), 'purge-entire-cache')) {
+            if (false === isset($_GET['_wpnonce']) || false === wp_verify_nonce(sanitize_text_field($_GET['_wpnonce']), 'purge-entire-cache')) {
                 return;                                                                           
             }   
             $host = (true === isset($_SERVER['HTTP_HOST']) && false === empty(sanitize_text_field($_SERVER['HTTP_HOST'])) ? sanitize_text_field($_SERVER['HTTP_HOST']) : '');
