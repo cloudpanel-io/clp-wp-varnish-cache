@@ -1,3 +1,6 @@
+1.0.3 Stefan Wieczorek <stefan.wieczorek@cloudpanel.io> Tue, 17 Feb 2026 08:08:08
+- Fix CVE‑2026‑24525
+
 1.0.2 Stefan Wieczorek <stefan.wieczorek@cloudpanel.io> Fri, 22 Nov 2024 08:08:08
 - Update tested versions
 
