@@ -21,9 +21,19 @@ if (false ===  function_exists('add_action')) {
 define('CLP_VARNISH_VERSION', '1.0.3');
 $is_admin = is_admin();
 
+// Always define plugin dir so it can be used in all contexts.
+define('CLP_VARNISH_PLUGIN_DIR', plugin_dir_path(__FILE__));
+
+// Core classes used in both frontend and admin.
+require_once CLP_VARNISH_PLUGIN_DIR . 'class.varnish-cache-manager.php';
+require_once CLP_VARNISH_PLUGIN_DIR . 'class.varnish-cache-purge.php';
+
+// Instantiate core services.
+$clp_varnish_cache_manager = new ClpVarnishCacheManager();
+$clp_varnish_cache_purge   = new ClpVarnishCachePurge($clp_varnish_cache_manager);
+
+// Admin-specific functionality (unchanged behaviour).
 if (true === $is_admin) {
-    define('CLP_VARNISH_PLUGIN_DIR', plugin_dir_path( __FILE__));
-    require_once CLP_VARNISH_PLUGIN_DIR . 'class.varnish-cache-manager.php';
     require_once CLP_VARNISH_PLUGIN_DIR . 'class.varnish-cache-admin.php';
     $clp_varnish_cache_admin = new ClpVarnishCacheAdmin();
 }
