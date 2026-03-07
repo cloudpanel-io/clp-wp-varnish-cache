@@ -12,7 +12,7 @@ This is a fork of [cloudpanel-io/clp-wp-varnish-cache](https://github.com/cloudp
 
 ### 1.1.0
 
-- **Auto-purge on system updates** — Optionally clear the entire Varnish cache when WordPress core, a theme, or a plugin is updated. Controlled by a new checkbox in the plugin settings.
+- **Auto-purge on system updates** — Optionally clear the entire Varnish cache when WordPress core, a theme, or a plugin is updated. Controlled by a new checkbox in the plugin settings. Inspired by [upstream PR #5](https://github.com/cloudpanel-io/clp-wp-varnish-cache/pull/5) by [@filipmanzi](https://github.com/filipmanzi).
 
 ### 1.0.4
 
