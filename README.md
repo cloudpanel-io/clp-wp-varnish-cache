@@ -1,4 +1,6 @@
-With the plugin **CLP Varnish Cache Plugin** for **WordPress**, you can manage the cache settings and perform purge operations.
+# CLP Varnish Cache (Fork)
+
+This is a fork of [cloudpanel-io/clp-wp-varnish-cache](https://github.com/cloudpanel-io/clp-wp-varnish-cache) — the **CLP Varnish Cache Plugin** for **WordPress**, which lets you manage cache settings and perform purge operations.
 
 <p align="center">
   <a href="https://www.cloudpanel.io/docs/v2/frontend-area/varnish-cache/wordpress/plugin/" target="_blank">
@@ -6,13 +8,12 @@ With the plugin **CLP Varnish Cache Plugin** for **WordPress**, you can manage t
   </a>
 </p>
 
-## :sparkling_heart: Support This Project
+## Changes in this fork
 
-* Please star the project
-* Write about **CloudPanel** on platforms like **Twitter**, **Facebook** or **LinkedIn**
-* Follow us on [Twitter](https://twitter.com/cloudpanel_io) and retweet our tweets
-* Write a **Blog** post about **CloudPanel**
-* Give us [Feedback](https://www.cloudpanel.io/feedback/) to improve **CloudPanel**
-* Report [Bugs](https://github.com/cloudpanel-io/cloudpanel-ce/issues) on Github
-* Join our [Discord Server](https://discord.cloudpanel.io/)
-* [Get in touch with us](https://www.cloudpanel.io/contact/) if you have other ideas
+### 1.1.0
+
+- **Auto-purge on system updates** — Optionally clear the entire Varnish cache when WordPress core, a theme, or a plugin is updated. Controlled by a new checkbox in the plugin settings.
+
+### 1.0.4
+
+- **Fix fatal error when purging cache from admin bar** — `check_entire_cache_purge()` was called during plugin load, before `wp_get_current_user()` was available. The method is now hooked into `admin_init` instead. Fixes [upstream issue #15](https://github.com/cloudpanel-io/clp-wp-varnish-cache/issues/15).
