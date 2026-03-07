@@ -55,6 +55,14 @@ class ClpVarnishCacheManager {
         return $this->cache_settings;
     }
 
+    /**
+     * Check if cache should be cleared on WP core, theme, or plugin updates.
+     */
+    public function should_clear_on_updates(): bool {
+        $settings = $this->get_cache_settings();
+        return isset($settings['clearOnUpdates']) && $settings['clearOnUpdates'] === true;
+    }
+
     public function write_cache_settings(array $settings) {
         $settings_file = sprintf('%s/.varnish-cache/settings.json', rtrim(getenv('HOME'), '/'));
         $settings = json_encode($settings, JSON_PRETTY_PRINT);

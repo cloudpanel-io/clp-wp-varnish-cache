@@ -14,10 +14,10 @@ class ClpVarnishCacheAdmin {
         add_action('admin_menu', array($this, 'add_admin_menu'), 100);
         add_action('network_admin_menu', array($this, 'add_admin_menu'), 100);
         add_action('admin_enqueue_scripts', array($this, 'add_css'));
-        $this->check_entire_cache_purge();
+        add_action('admin_init', array($this, 'check_entire_cache_purge'));
     }
 
-    private function check_entire_cache_purge() {
+    public function check_entire_cache_purge() {
         if (true === isset($_GET['clp-varnish-cache']) && 'purge-entire-cache' == sanitize_text_field($_GET['clp-varnish-cache'])) {
             if (false === current_user_can('manage_options')) {                                   
                 return;                                                                           
