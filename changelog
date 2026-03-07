@@ -1,3 +1,6 @@
+1.0.4 Thomas Barregren <thomas@kntnt.com> Fri, 07 Mar 2026
+- Fix fatal error when purging cache from admin bar (issue #15)
+
 1.0.3 Stefan Wieczorek <stefan.wieczorek@cloudpanel.io> Tue, 17 Feb 2026 08:08:08
 - Fix CVE‑2026‑24525
 
