@@ -23,7 +23,6 @@ if (true === isset($_POST['action']) && 'save-settings' == sanitize_text_field($
     $excludes = (true === isset($_POST['excludes']) ? sanitize_textarea_field($_POST['excludes']) : '');
     $excludes = array_map('trim', array_filter(explode(PHP_EOL, $excludes)));
     $clear_on_updates = (1 == getPostValue('clear-on-updates') ? true : false);
-    $clear_on_post_save = (1 == getPostValue('clear-on-post-save') ? true : false);
     if (false === empty($server) && false === empty($cache_lifetime) && false === empty($cache_tag_prefix)) {
         $cache_settings = [
             'enabled'         => $enabled,
@@ -33,7 +32,6 @@ if (true === isset($_POST['action']) && 'save-settings' == sanitize_text_field($
             'excludes'        => $excludes,
             'excludedParams'  => $excluded_params,
             'clearOnUpdates'  => $clear_on_updates,
-            'clearOnPostSave' => $clear_on_post_save,
         ];
         $clp_cache_manager->write_cache_settings($cache_settings);
         $clp_cache_manager->reset_cache_settings();
@@ -85,7 +83,6 @@ $cache_tag_prefix = $clp_cache_manager->get_cache_tag_prefix();
 $excluded_params = $clp_cache_manager->get_excluded_params();
 $excludes = $clp_cache_manager->get_excludes();
 $clear_on_updates = $clp_cache_manager->should_clear_on_updates();
-$clear_on_post_save = $clp_cache_manager->should_clear_on_post_save();
 
 ?>
 <h1 id="clp-varnish-cache"><?php esc_html_e( 'CLP Varnish Cache', 'clp-varnish-cache' ); ?></h1>
@@ -169,15 +166,6 @@ $clear_on_post_save = $clp_cache_manager->should_clear_on_post_save();
                   <td>
                     <input type="checkbox" name="clear-on-updates" <?php echo (true === $clear_on_updates ? 'checked' : ''); ?> value="1" />
                     <p class="description"><?php esc_html_e( 'Automatically clear the entire cache when WordPress core, a theme, or a plugin is updated.', 'clp-varnish-cache' ); ?></p>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="field-name">
-                    <?php esc_html_e( 'Clear cache on post save', 'clp-varnish-cache' ); ?>:
-                  </td>
-                  <td>
-                    <input type="checkbox" name="clear-on-post-save" <?php echo (true === $clear_on_post_save ? 'checked' : ''); ?> value="1" />
-                    <p class="description"><?php esc_html_e( 'Automatically clear the cache of a post, page, or custom post type when it is published or updated.', 'clp-varnish-cache' ); ?></p>
                   </td>
                 </tr>
               </tbody>
