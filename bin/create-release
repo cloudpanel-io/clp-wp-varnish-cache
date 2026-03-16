@@ -1,13 +1,42 @@
 #!/bin/bash
-VERSION='1.0.1'
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+echo -e "${BLUE}===> Starting Build Process...${NC}"
+
+VERSION=$(grep "define('CLP_VARNISH_VERSION'" ../clp-varnish-cache.php | awk -F"'" '{print $4}')
+
+if [ -z "$VERSION" ]; then
+    echo -e "${RED}✖ Error: Could not find CLP_VARNISH_VERSION in ../clp-varnish-cache.php${NC}"
+    exit 1
+fi
+
+echo -e "${GREEN}✔ Found Version: ${YELLOW}$VERSION${NC}\n"
+
+echo -e "${BLUE}===> Preparing temporary directories...${NC}"
 TMP_DIRECTORY='tmp'
 TMP_RELEASE_DIRECTORY='tmp/clp-varnish-cache/'
+
 rm -rf $TMP_DIRECTORY
 mkdir -p $TMP_RELEASE_DIRECTORY
-cp -R ../* $TMP_RELEASE_DIRECTORY
+
+# Copy files & silence the "cannot copy directory into itself" error
+cp -R ../* $TMP_RELEASE_DIRECTORY 2>/dev/null
+
 rm -rf $TMP_RELEASE_DIRECTORY/bin/
 rm -rf $TMP_RELEASE_DIRECTORY/release/
-rm $TMP_RELEASE_DIRECTORY/languages/*.po~
+rm -f $TMP_RELEASE_DIRECTORY/languages/*.po~ 2>/dev/null
+
+echo -e "${BLUE}===> Creating zip archive...${NC}"
 cd $TMP_DIRECTORY
-zip -r "clp-varnish-cache-$VERSION.zip" clp-varnish-cache
+
+# '-q' (quiet) flag to stop 'zip' from spamming the console
+zip -qr "clp-varnish-cache-$VERSION.zip" clp-varnish-cache
 rm -rf clp-varnish-cache
+
+echo -e "\n${GREEN}✔ Success! Release packaged successfully.${NC}"
+echo -e "📁 ${YELLOW}bin/tmp/clp-varnish-cache-$VERSION.zip${NC}\n"
