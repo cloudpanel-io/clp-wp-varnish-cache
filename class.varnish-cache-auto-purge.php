@@ -3,10 +3,10 @@
 class ClpVarnishCacheAutoPurge {
 
     public function __construct() {
-        add_action('upgrader_process_complete', array($this, 'auto_purge'), 11, 2);
-        add_action('deactivated_plugin', array($this, 'auto_purge'));
-        add_action('activated_plugin', array($this, 'auto_purge'));
-        add_action('switch_theme', array($this, 'auto_purge'));
+        add_action('upgrader_process_complete', array($this, 'auto_purge'), 100, 2);
+        add_action('deactivated_plugin', array($this, 'auto_purge'), 100);
+        add_action('activated_plugin', array($this, 'auto_purge'), 100);
+        add_action('switch_theme', array($this, 'auto_purge'), 100);
     }
 
     public function auto_purge( $upgrader_or_plugin = null, $options = null ) {
