@@ -1,5 +1,11 @@
+1.1.0 Stefan Wieczorek <stefan.wieczorek@cloudpanel.io> Tue, 16 Mar 2026 08:08:08
+- Automatically purge cache after plugin/theme updates:
+  • Core upgrade
+  • Activating or deactivating plugins
+  • Switching themes
+
 1.0.4 Stefan Wieczorek <stefan.wieczorek@cloudpanel.io> Mon, 16 Mar 2026 08:08:08
-- #18 Move cache check into admin_init to ensure get_current_user is available
+- #17 Move cache check into admin_init to ensure get_current_user is available
 
 1.0.3 Stefan Wieczorek <stefan.wieczorek@cloudpanel.io> Tue, 17 Feb 2026 08:08:08
 - Fix CVE‑2026‑24525
