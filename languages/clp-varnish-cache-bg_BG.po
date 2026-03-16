@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: CLP Varnish Cache\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-19 08:32+0000\n"
-"PO-Revision-Date: 2026-03-16 18:11+0200\n"
+"PO-Revision-Date: 2026-03-16 18:21+0200\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg\n"
@@ -65,7 +65,7 @@ msgstr "Изключени параметри"
 
 #: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:143
 msgid "Excludes"
-msgstr "Изключвания"
+msgstr "Изключения"
 
 #. Author URI of the plugin
 msgid "https://www.cloudpanel.io"
