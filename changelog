@@ -1,4 +1,4 @@
-1.1.0 Stefan Wieczorek <stefan.wieczorek@cloudpanel.io> Tue, 16 Mar 2026 08:08:08
+1.1.0 Stefan Wieczorek <stefan.wieczorek@cloudpanel.io> Tue, 17 Mar 2026 08:08:08
 - #18 Automatically purge cache after plugin/theme updates: (Thanks to 7heMech)
   • Core upgrade
   • Activating or deactivating plugins
