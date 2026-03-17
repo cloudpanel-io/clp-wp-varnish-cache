@@ -17,13 +17,6 @@ class ClpVarnishCacheAutoPurge {
 
         if (!class_exists( 'ClpVarnishCacheManager')) return;
         $manager = new ClpVarnishCacheManager();
-
-        if (!$manager->is_enabled()) return;
-
-        $host = wp_parse_url(home_url(), PHP_URL_HOST);
-        if (!empty($host)) $manager->purge_host($host);
-
-        $prefix = $manager->get_cache_tag_prefix();
-        if (!empty($prefix)) $manager->purge_tag($prefix);
+        $manager->purge_entire_cache();
     }
 }

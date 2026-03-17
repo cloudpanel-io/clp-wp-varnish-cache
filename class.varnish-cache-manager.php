@@ -45,14 +45,35 @@ class ClpVarnishCacheManager {
     public function get_cache_settings() {
         if (true === empty($this->cache_settings)) {
             $settings_file = sprintf('%s/.varnish-cache/settings.json', rtrim(getenv('HOME'), '/'));
-            if (true === file_exists($settings_file)) {
-                $cache_settings = @json_decode(file_get_contents($settings_file), true);
-                if (false === empty($cache_settings)) {
-                    $this->cache_settings = $cache_settings;
+            if (file_exists($settings_file) && is_readable($settings_file)) {
+                $file_content = file_get_contents($settings_file);
+                if ($file_content !== false) {
+                    $cache_settings = json_decode($file_content, true);
+                    if (json_last_error() === JSON_ERROR_NONE && !empty($cache_settings)) {
+                        $this->cache_settings = $cache_settings;
+                    }
                 }
             }
         }
         return $this->cache_settings;
+    }
+
+    public function purge_entire_cache(): bool {
+        if ( ! $this->is_enabled() ) {
+            return false;
+        }
+
+        $host = wp_parse_url( home_url(), PHP_URL_HOST );
+        if ( ! empty( $host ) ) {
+            $this->purge_host( $host );
+        }
+
+        $prefix = $this->get_cache_tag_prefix();
+        if ( ! empty( $prefix ) ) {
+            $this->purge_tag( $prefix );
+        }
+
+        return true;
     }
 
     public function write_cache_settings(array $settings) {

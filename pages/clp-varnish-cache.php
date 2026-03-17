@@ -14,6 +14,10 @@ function getPostValue($key) {
 $clp_cache_manager = $clp_varnish_cache_admin->get_clp_cache_manager();
 
 if (true === isset($_POST['action']) && 'save-settings' == sanitize_text_field($_POST['action'])) {
+    if ( ! isset( $_POST['clp_varnish_nonce'] ) || ! wp_verify_nonce( sanitize_text_field($_POST['clp_varnish_nonce']), 'clp_varnish_save_settings' ) ) {
+        wp_die( 'Security check failed.' );
+    }
+    
     $old_cache_tag_prefix = $clp_cache_manager->get_cache_tag_prefix();
     $enabled = (1 == getPostValue('enabled')  ? true : false);
     $server = getPostValue('server');
@@ -46,6 +50,10 @@ if (true === isset($_POST['action']) && 'save-settings' == sanitize_text_field($
 }
 
 if (true === isset($_POST['action']) && 'purge-cache' == sanitize_text_field($_POST['action'])) {
+    if ( ! isset( $_POST['clp_varnish_nonce'] ) || ! wp_verify_nonce( sanitize_text_field($_POST['clp_varnish_nonce']), 'clp_varnish_purge_cache' ) ) {
+        wp_die( 'Security check failed.' );
+    }
+    
     $purge_values = array_map('trim', array_filter(explode(',', getPostValue('purge-value'))));
     if (false === empty($purge_values)) {
         foreach ($purge_values as $purge_value) {
@@ -63,13 +71,11 @@ if (true === isset($_POST['action']) && 'purge-cache' == sanitize_text_field($_P
 }
 
 if (true === isset($_GET['action']) && 'purge-entire-cache' == sanitize_text_field($_GET['action'])) {
-    if (false === empty($host)) {
-        $clp_cache_manager->purge_host($host);
+    if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( $_GET['_wpnonce'] ), 'purge-entire-cache' ) ) {
+        wp_die( 'Security check failed.' );
     }
-    $cache_tag_prefix = $clp_cache_manager->get_cache_tag_prefix();
-    if (false === empty($cache_tag_prefix)) {
-        $clp_cache_manager->purge_tag($cache_tag_prefix);
-    }
+    
+    $clp_cache_manager->purge_entire_cache();
     $successNotice = 'Varnish Cache has been purged.';
 }
 
@@ -158,6 +164,7 @@ $excludes = $clp_cache_manager->get_excludes();
                 </tr>
               </tbody>
             </table>
+            <?php wp_nonce_field( 'clp_varnish_save_settings', 'clp_varnish_nonce' ); ?>
             <input type="hidden" name="action" value="save-settings" />
             <input type="submit" class="button action" value="<?php esc_html_e( 'Save', 'clp-varnish-cache' ); ?>" />
           </div>
@@ -167,7 +174,7 @@ $excludes = $clp_cache_manager->get_excludes();
         <div class="clp-varnish-cache-block">
           <div class="clp-varnish-cache-block-header">
             <h3><?php esc_html_e( 'Purge Cache', 'clp-varnish-cache' ); ?></h3>
-            <a class="button button-primary" href="<?php echo (true === $is_network ? network_admin_url('settings.php?page=clp-varnish-cache&action=purge-entire-cache') : admin_url('options-general.php?page=clp-varnish-cache&action=purge-entire-cache')) ?>">Purge Entire Cache</a>
+            <a class="button button-primary" href="<?php echo wp_nonce_url((true === $is_network ? network_admin_url('settings.php?page=clp-varnish-cache&action=purge-entire-cache') : admin_url('options-general.php?page=clp-varnish-cache&action=purge-entire-cache')), 'purge-entire-cache') ?>">Purge Entire Cache</a>
           </div>
           <div class="clp-varnish-cache-block-content clp-varnish-cache-block-purge-cache">
             <table class="form-table">
@@ -180,6 +187,7 @@ $excludes = $clp_cache_manager->get_excludes();
                 </tr>
               </tbody>
             </table>
+            <?php wp_nonce_field( 'clp_varnish_purge_cache', 'clp_varnish_nonce' ); ?>
             <input type="hidden" name="action" value="purge-cache" />
             <input type="submit" class="button action" value="<?php esc_html_e( 'Purge Cache', 'clp-varnish-cache' ); ?>" />
           </div>
