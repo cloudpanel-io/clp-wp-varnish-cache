@@ -2,10 +2,10 @@
 /*
  * Plugin Name: CLP Varnish Cache
  * Description: Varnish Cache Plugin by cloudpanel.io
- * Version: 1.1.0
+ * Version: 1.1.2
  * Text Domain: clp-varnish-cache
  * Domain Path: /languages
- * Requires at least: 6.0
+ * Requires WP at least: 6.0
  * Requires PHP: 7.1
  * Author: cloudpanel.io
  * Author URI: https://www.cloudpanel.io
@@ -18,7 +18,7 @@ if (!function_exists('add_action')) {
     exit;
 }
 
-define('CLP_VARNISH_VERSION', '1.1.0');
+define('CLP_VARNISH_VERSION', '1.1.2');
 
 if (!is_admin()) return;
 
