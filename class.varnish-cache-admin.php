@@ -27,6 +27,7 @@ class ClpVarnishCacheAdmin {
     }
 
     public function admin_entire_cache_purge() {
+        if (($_GET['page'] ?? '') === 'clp-varnish-cache') return;
         echo '<div id="notice" class="notice notice-success fade is-dismissible"><p><strong>' . esc_html__('Varnish Cache has been purged.', 'clp-varnish-cache') . '</strong></p></div>';
     }
 
