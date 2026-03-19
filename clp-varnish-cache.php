@@ -13,19 +13,19 @@
  * GitHub Branch: master
  */
 
-if (false ===  function_exists('add_action')) {
-    echo 'Hi there!  I\'m just a plugin, not much I can do when called directly.';
+if (!function_exists('add_action')) {
+    echo 'Hi there! I\'m just a plugin, not much I can do when called directly.';
     exit;
 }
 
 define('CLP_VARNISH_VERSION', '1.1.0');
-$is_admin = is_admin();
 
-if (true === $is_admin) {
-    define('CLP_VARNISH_PLUGIN_DIR', plugin_dir_path( __FILE__));
-    require_once CLP_VARNISH_PLUGIN_DIR . 'class.varnish-cache-manager.php';
-    require_once CLP_VARNISH_PLUGIN_DIR . 'class.varnish-cache-admin.php';
-    require_once CLP_VARNISH_PLUGIN_DIR . 'class.varnish-cache-auto-purge.php';
-    $clp_varnish_cache_auto_purge = new ClpVarnishCacheAutoPurge();
-    $clp_varnish_cache_admin = new ClpVarnishCacheAdmin();
-}
+if (!is_admin()) return;
+
+define('CLP_VARNISH_PLUGIN_DIR', plugin_dir_path(__FILE__));
+require_once CLP_VARNISH_PLUGIN_DIR . 'class.varnish-cache-manager.php';
+require_once CLP_VARNISH_PLUGIN_DIR . 'class.varnish-cache-auto-purge.php';
+require_once CLP_VARNISH_PLUGIN_DIR . 'class.varnish-cache-admin.php';
+
+$clp_varnish_cache_auto_purge = new ClpVarnishCacheAutoPurge();
+$clp_varnish_cache_admin = new ClpVarnishCacheAdmin();
