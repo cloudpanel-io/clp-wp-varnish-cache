@@ -1,3 +1,5 @@
+/* === CLP Varnish Cache — CloudPanel-style UI === */
+
 #wp-admin-bar-clp-varnish-cache .ab-icon {
   float: left;
   width: 22px;
@@ -7,61 +9,271 @@
   background-size: 20px;
 }
 
+/* Container */
 .clp-varnish-cache-container {
-  max-width: 900px;
+  max-width: 1200px;
+  margin: 20px 0 0;
+  padding-right: 20px;
 }
 
-.clp-varnish-cache-container .notice {
-  margin: 0 !important;
-}
-
+/* Card */
 .clp-varnish-cache-block {
-  background-color: #fdfdfd;
-  border: 1px solid #e5e5e5;
-  box-shadow: 0 1px 1px #0000000a;
-  margin: 20px 0px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  margin: 0 0 20px;
+  overflow: hidden;
 }
 
+/* Card header */
 .clp-varnish-cache-block-header {
-  border-bottom: 1px solid #ccc;
-  padding: 10px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #fff;
 }
 
 .clp-varnish-cache-block-header h3 {
-  margin: 5px 0px;
+  margin: 0;
   padding: 0;
-  font-size: 1.4em;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a202c;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
+/* Card body */
 .clp-varnish-cache-block-content {
-  padding: 25px 20px;
+  padding: 24px;
   font-size: 14px;
 }
 
-.clp-varnish-cache-block-content .form-table {
-  margin-top: 0;
+/* Button row — no border, no background, part of the card body */
+.clp-varnish-cache-block-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 24px 24px;
 }
 
-.clp-varnish-cache-block-content .form-table td {
-  padding: 10px 0px;
+/* 2-column form grid */
+.clp-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
 
-.clp-varnish-cache-block-content input[type=text],
-.clp-varnish-cache-block-content textarea {
+.clp-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.clp-form-group.clp-full-col {
+  grid-column: 1 / -1;
+}
+
+.clp-form-group label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #4a5568;
+}
+
+.clp-form-group label .clp-required {
+  color: #e53e3e;
+  margin-left: 2px;
+}
+
+/* Inputs & textarea */
+.clp-varnish-cache-container input[type="text"],
+.clp-varnish-cache-container textarea {
   width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #2d3748;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
 }
 
-.clp-varnish-cache-block-content table {
-  margin-bottom: 10px;
+.clp-varnish-cache-container input[type="text"]:focus,
+.clp-varnish-cache-container textarea:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
 }
 
-.clp-varnish-cache-block-content table td {
+.clp-varnish-cache-container textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* Description text */
+.clp-varnish-cache-container p.description {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #718096;
+}
+
+/* Toggle switch — sized to match text line height */
+.clp-toggle {
+  position: relative;
+  display: inline-block;
+  width: 28px;
+  height: 18px;
+  flex-shrink: 0;
+  vertical-align: middle;
+  margin-top: -1px;
+}
+
+.clp-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.clp-toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: #cbd5e0;
+  border-radius: 24px;
+  transition: background 0.2s;
+}
+
+.clp-toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  left: 3px;
+  top: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.clp-toggle input:checked + .clp-toggle-slider {
+  background: #3b82f6;
+}
+
+.clp-toggle input:checked + .clp-toggle-slider::before {
+  transform: translateX(10px);
+}
+
+/* Buttons — override WP defaults */
+.clp-varnish-cache-container .button.clp-btn-primary,
+.clp-varnish-cache-container input[type="submit"].button {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 28px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid #3b82f6;
+  background: #3b82f6;
+  color: #fff;
+  text-shadow: none;
+  box-shadow: none;
+  height: auto;
+  line-height: 1.5;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.clp-varnish-cache-container .button.clp-btn-primary:hover,
+.clp-varnish-cache-container input[type="submit"].button:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+/* "Purge Entire Cache" secondary button */
+.clp-varnish-cache-container .button.clp-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid #cbd5e0;
+  background: #fff;
+  color: #4a5568;
+  text-shadow: none;
+  box-shadow: none;
+  height: auto;
+  line-height: 1.5;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.clp-varnish-cache-container .button.clp-btn-secondary:hover {
+  background: #f7fafc;
+  border-color: #a0aec0;
+  color: #2d3748;
+}
+
+/* Support table */
+.clp-support-table {
+  border-collapse: collapse;
+  width: auto;
+}
+
+.clp-support-table td {
+  padding: 7px 0;
+  font-size: 13px;
+  color: #4a5568;
   vertical-align: top;
 }
 
-.clp-varnish-cache-block-content table td.field-name {
-  width: 30%;
-  font-weight: bold;
+.clp-support-table td:first-child {
+  font-weight: 600;
+  width: 130px;
+  padding-right: 12px;
+}
+
+.clp-support-table a {
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+.clp-support-table a:hover {
+  text-decoration: underline;
+}
+
+/* Notices */
+.clp-varnish-cache-container .notice {
+  margin: 0 0 16px !important;
+  border-radius: 6px;
+  border-left: none;
+  padding: 10px 16px;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .clp-varnish-cache-container {
+    padding-right: 12px;
+  }
+
+  .clp-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .clp-form-group.clp-full-col {
+    grid-column: 1;
+  }
+
+  .clp-varnish-cache-block-header {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
 }
