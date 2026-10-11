@@ -14,6 +14,7 @@ function getPostValue($key) {
 $clp_cache_manager = $clp_varnish_cache_admin->get_clp_cache_manager();
 
 if (true === isset($_POST['action']) && 'save-settings' == sanitize_text_field($_POST['action'])) {
+    check_admin_referer('clp-varnish-cache-save-settings');
     $old_cache_tag_prefix = $clp_cache_manager->get_cache_tag_prefix();
     $enabled = (1 == getPostValue('enabled')  ? true : false);
     $server = getPostValue('server');
@@ -46,6 +47,7 @@ if (true === isset($_POST['action']) && 'save-settings' == sanitize_text_field($
 }
 
 if (true === isset($_POST['action']) && 'purge-cache' == sanitize_text_field($_POST['action'])) {
+    check_admin_referer('clp-varnish-cache-purge-cache');
     $purge_values = array_map('trim', array_filter(explode(',', getPostValue('purge-value'))));
     if (false === empty($purge_values)) {
         foreach ($purge_values as $purge_value) {
@@ -63,6 +65,7 @@ if (true === isset($_POST['action']) && 'purge-cache' == sanitize_text_field($_P
 }
 
 if (true === isset($_GET['action']) && 'purge-entire-cache' == sanitize_text_field($_GET['action'])) {
+    check_admin_referer('purge-entire-cache');
     if (false === empty($host)) {
         $clp_cache_manager->purge_host($host);
     }
@@ -158,6 +161,7 @@ $excludes = $clp_cache_manager->get_excludes();
                 </tr>
               </tbody>
             </table>
+            <?php wp_nonce_field('clp-varnish-cache-save-settings'); ?>
             <input type="hidden" name="action" value="save-settings" />
             <input type="submit" class="button action" value="<?php esc_html_e( 'Save', 'clp-varnish-cache' ); ?>" />
           </div>
@@ -167,7 +171,7 @@ $excludes = $clp_cache_manager->get_excludes();
         <div class="clp-varnish-cache-block">
           <div class="clp-varnish-cache-block-header">
             <h3><?php esc_html_e( 'Purge Cache', 'clp-varnish-cache' ); ?></h3>
-            <a class="button button-primary" href="<?php echo (true === $is_network ? network_admin_url('settings.php?page=clp-varnish-cache&action=purge-entire-cache') : admin_url('options-general.php?page=clp-varnish-cache&action=purge-entire-cache')) ?>">Purge Entire Cache</a>
+            <a class="button button-primary" href="<?php echo esc_url(wp_nonce_url((true === $is_network ? network_admin_url('settings.php?page=clp-varnish-cache&action=purge-entire-cache') : admin_url('options-general.php?page=clp-varnish-cache&action=purge-entire-cache')), 'purge-entire-cache')) ?>">Purge Entire Cache</a>
           </div>
           <div class="clp-varnish-cache-block-content clp-varnish-cache-block-purge-cache">
             <table class="form-table">
@@ -180,6 +184,7 @@ $excludes = $clp_cache_manager->get_excludes();
                 </tr>
               </tbody>
             </table>
+            <?php wp_nonce_field('clp-varnish-cache-purge-cache'); ?>
             <input type="hidden" name="action" value="purge-cache" />
             <input type="submit" class="button action" value="<?php esc_html_e( 'Purge Cache', 'clp-varnish-cache' ); ?>" />
           </div>
