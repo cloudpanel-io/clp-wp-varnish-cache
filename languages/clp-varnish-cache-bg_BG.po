@@ -59,6 +59,10 @@ msgstr ""
 msgid "Entire Cache"
 msgstr "Целия кеш"
 
+#: ../../../../clp-wp-varnish-cache/class.varnish-cache-admin.php
+msgid "This Page"
+msgstr "Тази страница"
+
 #: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:134
 msgid "Excluded Params"
 msgstr "Изключени параметри"

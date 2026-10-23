@@ -11,10 +11,13 @@ class ClpVarnishCacheAdmin {
 
     public function init() {
         add_action('admin_init', array($this, 'check_entire_cache_purge'), 100);
+        add_action('template_redirect', array($this, 'check_entire_cache_purge'), 1);
+        add_action('template_redirect', array($this, 'check_current_url_purge'), 1);
         add_action('admin_bar_menu', array($this, 'add_adminbar'), 100);
         add_action('admin_menu', array($this, 'add_admin_menu'), 100);
         add_action('network_admin_menu', array($this, 'add_admin_menu'), 100);
         add_action('admin_enqueue_scripts', array($this, 'add_css'));
+        add_action('wp_enqueue_scripts', array($this, 'add_css'));
     }
 
     public function check_entire_cache_purge() {
@@ -25,16 +28,55 @@ class ClpVarnishCacheAdmin {
             if (false === isset($_GET['_wpnonce']) || false === wp_verify_nonce(sanitize_text_field($_GET['_wpnonce']), 'purge-entire-cache')) {
                 return;                                                                           
             }   
-            $host = (true === isset($_SERVER['HTTP_HOST']) && false === empty(sanitize_text_field($_SERVER['HTTP_HOST'])) ? sanitize_text_field($_SERVER['HTTP_HOST']) : '');
-            if (false === empty($host)) {
-                $this->clp_varnish_cache_manager->purge_host($host);
+            $this->clp_varnish_cache_manager->purge_entire_cache($this->get_request_host());
+            if (true === is_admin()) {
+                add_action('admin_notices', array( $this, 'admin_entire_cache_purge'));
+            } else {
+                wp_safe_redirect($this->get_current_url());
+                exit;
             }
-            $cache_tag_prefix = $this->clp_varnish_cache_manager->get_cache_tag_prefix();
-            if (false === empty($cache_tag_prefix)) {
-                $this->clp_varnish_cache_manager->purge_tag($cache_tag_prefix);
-            }
-            add_action('admin_notices', array( $this, 'admin_entire_cache_purge'));
         }
+    }
+
+    public function check_current_url_purge() {
+        if (true === isset($_GET['clp-varnish-cache']) && 'purge-current-url' == sanitize_text_field($_GET['clp-varnish-cache'])) {
+            if (false === current_user_can('manage_options')) {
+                return;
+            }
+            if (false === isset($_GET['_wpnonce']) || false === wp_verify_nonce(sanitize_text_field($_GET['_wpnonce']), 'purge-current-url')) {
+                return;
+            }
+            $current_url = $this->get_current_url();
+            $this->clp_varnish_cache_manager->purge_exact_url($current_url);
+            wp_safe_redirect($current_url);
+            exit;
+        }
+    }
+
+    private function get_request_host() {
+        $host = (true === isset($_SERVER['HTTP_HOST']) && false === empty(sanitize_text_field($_SERVER['HTTP_HOST'])) ? sanitize_text_field($_SERVER['HTTP_HOST']) : '');
+        return $host;
+    }
+
+    private function get_current_url() {
+        $request_uri = (true === isset($_SERVER['REQUEST_URI']) ? esc_url_raw(wp_unslash($_SERVER['REQUEST_URI'])) : '/');
+        $parts = explode('?', $request_uri, 2);
+        if (isset($parts[1])) {
+            // Preserve the query's encoding and repeated keys: they are part of
+            // Varnish's cache key, even when PHP parses them to the same value.
+            $query = array_filter(explode('&', $parts[1]), function($parameter) {
+                $key = urldecode(explode('=', $parameter, 2)[0]);
+                return !in_array($key, ['clp-varnish-cache', '_wpnonce'], true);
+            });
+            $request_uri = $parts[0] . (empty($query) ? '' : '?' . implode('&', $query));
+        }
+        return sprintf('%s://%s%s', (true === is_ssl() ? 'https' : 'http'), $this->get_request_host(), $request_uri);
+    }
+
+    private function get_frontend_purge_url($action) {
+        $url = $this->get_current_url();
+        $separator = strpos($url, '?') === false ? '?' : '&';
+        return esc_url($url . $separator . 'clp-varnish-cache=' . $action . '&_wpnonce=' . wp_create_nonce($action));
     }
 
     public function admin_entire_cache_purge() {
@@ -47,7 +89,7 @@ class ClpVarnishCacheAdmin {
 
     public function add_adminbar($adminbar) {
         $is_admin = is_admin();
-        if (true === $is_admin && true === current_user_can( 'edit_published_posts' )) {
+        if (true === current_user_can( 'manage_options' )) {
             $varnish_cache_settings = $this->clp_varnish_cache_manager->get_cache_settings();
             if (false === empty($varnish_cache_settings)) {
                 $menu_title = __( 'CLP Varnish Cache', 'clp-varnish-cache');
@@ -70,7 +112,7 @@ class ClpVarnishCacheAdmin {
                         'parent' => 'clp-varnish-cache-purge',
                         'id'     => 'clp-varnish-cache-purge-entire-cache',
                         'title'  => __( 'Entire Cache', 'clp-varnish-cache' ),
-                        'href'   => wp_nonce_url(add_query_arg('clp-varnish-cache', 'purge-entire-cache'), 'purge-entire-cache'),
+                        'href'   => $is_admin ? wp_nonce_url(add_query_arg('clp-varnish-cache', 'purge-entire-cache'), 'purge-entire-cache') : $this->get_frontend_purge_url('purge-entire-cache'),
                         'meta'   => [
                             'title' => __( 'Entire Cache', 'clp-varnish-cache' ),
                         ],
@@ -92,6 +134,17 @@ class ClpVarnishCacheAdmin {
                         'meta'   => [ 'tabindex' => '0' ],
                     ],
                 ];
+                if (false === $is_admin) {
+                    array_splice($admin_bar_nodes, 3, 0, [[
+                        'parent' => 'clp-varnish-cache-purge',
+                        'id'     => 'clp-varnish-cache-purge-current-url',
+                        'title'  => __( 'This Page', 'clp-varnish-cache' ),
+                        'href'   => $this->get_frontend_purge_url('purge-current-url'),
+                        'meta'   => [
+                            'title' => __( 'This Page', 'clp-varnish-cache' ),
+                        ],
+                    ]]);
+                }
                 foreach ($admin_bar_nodes as $node) {
                     $adminbar->add_node($node);
                 }

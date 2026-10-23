@@ -3,6 +3,12 @@
 class ClpVarnishCacheManager {
 
     private $cache_settings = [];
+    private $exit_on_error = true;
+
+    public function set_exit_on_error($exit_on_error): void
+    {
+        $this->exit_on_error = (bool)$exit_on_error;
+    }
 
     public function is_enabled() {
         $settings = $this->get_cache_settings();
@@ -73,6 +79,29 @@ class ClpVarnishCacheManager {
         $this->purge($headers);
     }
 
+    public function purge_entire_cache($host = null): void
+    {
+        if (true === empty($host)) {
+            $host = wp_parse_url(home_url(), PHP_URL_HOST);
+        }
+        if (false === empty($host)) {
+            $this->purge_host($host);
+        }
+        $cache_tag_prefix = $this->get_cache_tag_prefix();
+        if (false === empty($cache_tag_prefix)) {
+            $this->purge_tag($cache_tag_prefix);
+        }
+    }
+
+    public function purge_post($post_id): void
+    {
+        $cache_tag_prefix = $this->get_cache_tag_prefix();
+        if (false === empty($cache_tag_prefix)) {
+            // The VCL bans X-Cache-Tags by regex; anchor it so post 2 doesn't also purge post 23.
+            $this->purge_tag(sprintf('(^|,)%s-post-%d(,|$)', preg_quote($cache_tag_prefix), $post_id));
+        }
+    }
+
     public function purge_tag($tag): void
     {
         $this->purge_tags([$tag]);
@@ -114,13 +143,56 @@ class ClpVarnishCacheManager {
         }
     }
 
-    private function purge(array $headers, $request_url = null): void
+    public function purge_exact_url($url): void
     {
+        $parsed_url = parse_url($url);
+        if (empty($parsed_url['host'])) {
+            throw new \Exception(sprintf('Not a valid url: %s', $url));
+        }
+        $host = $parsed_url['host'];
+        if (isset($parsed_url['port'])) {
+            $host .= ':' . $parsed_url['port'];
+        }
+        $path = isset($parsed_url['path']) ? $parsed_url['path'] : '/';
+        if (isset($parsed_url['query'])) {
+            $path .= '?' . $parsed_url['query'];
+        }
+        // CloudPanel uses the PURGE request target as a regex, not a literal URL.
+        $target = '^' . preg_quote($path) . '$';
+        if (preg_match('/[\x00-\x20\x7f]/', $target)) {
+            throw new \Exception(sprintf('Not a valid url: %s', $url));
+        }
+        $this->purge(['Host' => $host], null, $target);
+    }
+
+    private function purge(array $headers, $request_url = null, $request_target = null): void
+    {
+        $configure_transport = null;
         try {
             if (true === is_null($request_url)) {
                 $request_url = $this->get_server();
             }
             $request_url = sprintf('http://%s', $request_url);
+            if ($request_target !== null) {
+                // Set the target after URL normalization, which would otherwise
+                // percent-encode the regex. Scope hooks to this one request.
+                $configure_transport = function(&$url, &$headers, &$data, &$type, &$options) use ($request_url, $request_target) {
+                    if ($type !== 'PURGE' || rtrim($url, '/') !== rtrim($request_url, '/')) return;
+                    if (defined('CURLOPT_REQUEST_TARGET')) {
+                        $options['hooks']->register('curl.before_send', function($handle) use ($request_target) {
+                            curl_setopt($handle, CURLOPT_REQUEST_TARGET, $request_target);
+                        });
+                    } else {
+                        // Older PHP/cURL versions cannot override the target.
+                        $options['transport'] = class_exists('WpOrg\\Requests\\Transport\\Fsockopen')
+                            ? 'WpOrg\\Requests\\Transport\\Fsockopen' : 'Requests_Transport_fsockopen';
+                    }
+                    $options['hooks']->register('fsockopen.remote_host_path', function(&$path) use ($request_target) {
+                        $path = $request_target;
+                    });
+                };
+                add_action('requests-requests.before_request', $configure_transport, 10, 5);
+            }
             $response = wp_remote_request(
                 $request_url,
                 [
@@ -129,6 +201,9 @@ class ClpVarnishCacheManager {
                     'headers'   => $headers,
                 ]
             );
+            if (true === is_wp_error($response)) {
+                throw new \Exception($response->get_error_message());
+            }
             $http_status_code = 0;
             if (true === isset($response['response']['code'])) {
                 $http_status_code = $response['response']['code'];
@@ -138,8 +213,16 @@ class ClpVarnishCacheManager {
             }
         } catch (\Exception $e) {
             $error_message = $e->getMessage();
+            if (false === $this->exit_on_error) {
+                error_log(sprintf('Varnish Cache Purge Failed, Error Message: %s', $error_message));
+                return;
+            }
             echo esc_html(sprintf('Varnish Cache Purge Failed, Error Message: %s', $error_message));
             exit();
+        } finally {
+            if ($configure_transport !== null) {
+                remove_action('requests-requests.before_request', $configure_transport, 10);
+            }
         }
     }
 }

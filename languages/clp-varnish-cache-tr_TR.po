@@ -69,6 +69,10 @@ msgstr "Varnish Önbelleğini Etkinleştirme/Devre Dışı Bırakma, Tüm Sayfal
 msgid "Entire Cache"
 msgstr "Tüm Önbellek"
 
+#: ../../../../clp-wp-varnish-cache/class.varnish-cache-admin.php
+msgid "This Page"
+msgstr "Bu Sayfa"
+
 #: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:134
 #: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:134
 msgid "Excluded Params"
