@@ -70,6 +70,10 @@ msgstr ""
 msgid "Entire Cache"
 msgstr ""
 
+#: ../../../../clp-wp-varnish-cache/class.varnish-cache-admin.php
+msgid "This Page"
+msgstr "Diese Seite"
+
 #: ../../../../clp-wp-varnish-cache/pages/clp-varnish-cache.php:134
 #: ../../../../clp-wp-varnish-cache/bin/tmp/clp-varnish-cache/pages/clp-varnish-cache.php:134
 msgid "Excluded Params"
